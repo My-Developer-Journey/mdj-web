@@ -3,14 +3,47 @@
 import { Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
+import { toast } from 'react-toastify';
+import GoogleLoginButton from "../../components/GoogleLoginButton";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    try {
+      const res = await fetch("http://localhost:8080/api/authentications/sign-in", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      });
+
+      if (!res.ok) {
+        const error = await res.json();
+        toast.error(error.message || "Login failed");
+        return;
+      }
+
+      const data = await res.json();
+      toast.success("Login successful!");
+
+    } catch (err) {
+      toast.error("Something went wrong");
+    }
+  };
+
+
   return (
-    <div className="flex flex-col justify-center items-center mt-[3rem]">
+    <div className="flex flex-col justify-center items-center mt-[1rem]">
       <Link href="/">
         <img src="/logo.png" alt="Logo" className="h-10 w-auto cursor-pointer" />
       </Link>
@@ -18,7 +51,7 @@ const Login = () => {
       <div className="border border-gray-300 w-[30rem] my-[2rem] rounded-xl px-[2.5rem] pt-[3rem] pb-[3rem]">
         <h1 className="text-[2rem] font-bold mb-6 text-center">Welcome Back!</h1>
 
-        <form className="space-y-5">
+        <form className="space-y-5" onSubmit={handleLogin}>
           <div>
             <label htmlFor="email" className="block text-sm font-semibold mb-1">Email</label>
             <input
@@ -60,6 +93,8 @@ const Login = () => {
             Log in
           </button>
         </form>
+        <h1 className="text-center my-[0.5rem]">or</h1>
+        <GoogleLoginButton />
         <div className="mt-[1.5rem] flex flex-col justify-center items-center">
           <h1>
             Don’t have an account?{" "}
