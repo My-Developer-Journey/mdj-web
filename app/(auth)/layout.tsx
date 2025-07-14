@@ -18,7 +18,7 @@ export default function LoginLayout({
         </GoogleOAuthProvider>
         <ToastContainer
           toastClassName="font-medium min-h-[4rem] rounded-lg shadow-md"
-          position="top-right"
+          position="top-left"
           autoClose={3000}
           hideProgressBar={false}
           newestOnTop={true}

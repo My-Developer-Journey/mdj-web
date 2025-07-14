@@ -2,48 +2,66 @@
 
 import { Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from 'next/navigation';
 import { useState } from "react";
 import { toast } from 'react-toastify';
 import GoogleLoginButton from "../../components/GoogleLoginButton";
+import { useAuth } from '../../contexts/AuthContext';
 
 const Login = () => {
+  const router = useRouter();
+  const { setUser } = useAuth();
+  
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
   const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
+        e.preventDefault();
 
-    try {
-      const res = await fetch("http://localhost:8080/api/authentications/sign-in", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify({
-          email,
-          password,
-        }),
-      });
+        try {
+            const res = await fetch("http://localhost:8080/api/authentications/sign-in", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                credentials: "include",
+                body: JSON.stringify({
+                    email,
+                    password,
+                }),
+            });
 
-      if (!res.ok) {
-        const error = await res.json();
-        toast.error(error.message || "Login failed");
-        return;
-      }
+            if (!res.ok) {
+                const error = await res.json();
+                toast.error(error.message || "Login failed");
+                return;
+            }
 
-      const data = await res.json();
-      toast.success("Login successful!");
+            const userRes = await fetch('http://localhost:8080/api/users/me', {
+                credentials: 'include',
+            });
 
-    } catch (err) {
-      toast.error("Something went wrong");
-    }
-  };
+            console.log(userRes);
+
+            if (userRes.ok) {
+                const userData = await userRes.json();
+                setUser(userData);
+            } else {
+                setUser(null);
+            }
+
+            router.push("/");
+
+        } catch (err) {
+            console.error("Login error:", err);
+            toast.error("Something went wrong");
+        }
+    };
 
 
   return (
-    <div className="flex flex-col justify-center items-center mt-[1rem]">
+    <div className="mt-[8rem] flex flex-col justify-center items-center">
       <Link href="/">
         <img src="/logo.png" alt="Logo" className="h-10 w-auto cursor-pointer" />
       </Link>

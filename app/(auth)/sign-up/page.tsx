@@ -67,7 +67,7 @@ const SignUp = () => {
   };
 
   return (
-    <div className="flex flex-col justify-center items-center mt-[1rem]">
+    <div className="mt-[8rem] flex flex-col justify-center items-center">
       <Link href="/">
         <img src="/logo.png" alt="Logo" className="h-10 w-auto cursor-pointer" />
       </Link>
