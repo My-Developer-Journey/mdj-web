@@ -54,11 +54,11 @@ export default function Footer() {
 
             <div className="mt-12 border-t border-gray-700 pt-6 text-sm flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
                 <div className="space-x-4">
-                <Link href="#" className="hover:underline">Blog</Link>
-                <Link href="#" className="hover:underline">Facebook</Link>
-                <Link href="#" className="hover:underline">Twitter</Link>
-                <Link href="#" className="hover:underline">LinkedIn</Link>
-                <Link href="#" className="hover:underline">Instagram</Link>
+                <Link href="https://www.youtube.com/watch?v=dQw4w9WgXcQ&list=RDdQw4w9WgXcQ&start_radio=1" target="_blank" rel="noopener noreferrer" className="hover:underline">Blog</Link>
+                <Link href="https://www.facebook.com/100009258569058/" target="_blank" rel="noopener noreferrer" className="hover:underline">Facebook</Link>
+                <Link href="https://www.youtube.com/watch?v=dQw4w9WgXcQ&list=RDdQw4w9WgXcQ&start_radio=1" className="hover:underline">Twitter</Link>
+                <Link href="https://www.linkedin.com/in/quanng876/" target="_blank" rel="noopener noreferrer" className="hover:underline">LinkedIn</Link>
+                <Link href="https://www.instagram.com/tum_mi0403/" target="_blank" rel="noopener noreferrer" className="hover:underline">Instagram</Link>
                 </div>
                 <div className="text-gray-400">
                 © 2025 My Developer Journey. All rights reserved.
