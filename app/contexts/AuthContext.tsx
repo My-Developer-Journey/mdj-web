@@ -34,7 +34,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     useEffect(() => {
         const fetchMe = async () => {
             try {
-                const res = await fetch('http://localhost:8080/api/users/me', {
+                const res = await fetch('http://localhost:8080/api/users/profile', {
                     credentials: 'include',
                 });
 
