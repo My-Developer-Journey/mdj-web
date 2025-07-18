@@ -38,7 +38,7 @@ const Login = () => {
                 return;
             }
 
-            const userRes = await fetch('http://localhost:8080/api/users/me', {
+            const userRes = await fetch('http://localhost:8080/api/users/profile', {
                 credentials: 'include',
             });
 
