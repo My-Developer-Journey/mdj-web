@@ -4,7 +4,6 @@ import { Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from 'next/navigation';
 import { useState } from "react";
-import { toast } from 'react-toastify';
 import GoogleLoginButton from "../../components/GoogleLoginButton";
 import { useAuth } from '../../contexts/AuthContext';
 
@@ -15,6 +14,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [loginError, setLoginError] = useState("");
 
   const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -33,20 +33,23 @@ const Login = () => {
             });
 
             if (!res.ok) {
-                const error = await res.json();
-                toast.error(error.message || "Login failed");
+              const error = await res.json();
+              if (error.message === "Internal server error: Your account is not verified. A new verification email has been sent.") {
+                router.push("/email-sent?from=login");
                 return;
+              }
+              setLoginError(error.message || "Login failed");
+              return;
             }
 
             const userRes = await fetch('http://localhost:8080/api/users/profile', {
                 credentials: 'include',
             });
 
-            console.log(userRes);
-
             if (userRes.ok) {
                 const userData = await userRes.json();
                 setUser(userData);
+                setLoginError("");
             } else {
                 setUser(null);
             }
@@ -55,22 +58,19 @@ const Login = () => {
 
         } catch (err) {
             console.error("Login error:", err);
-            toast.error("Something went wrong");
+            setLoginError("Something went wrong!");
         }
     };
 
 
   return (
     <div className="mt-[8rem] flex flex-col justify-center items-center">
-      <Link href="/">
-        <img src="/logo.png" alt="Logo" className="h-10 w-auto cursor-pointer" />
-      </Link>
+      <div className="border border-gray-300 w-[30rem] mb-[2rem] rounded-xl px-[2.5rem] pt-[3rem] pb-[3rem]">
+        <h1 className="text-[2rem] font-bold mb-1 text-center">Welcome Back!</h1>
+        <h1 className="text-[0.875rem] font-medium mb-6 text-center text-gray-500">Enter your email and password to access your account</h1>
 
-      <div className="border border-gray-300 w-[30rem] my-[2rem] rounded-xl px-[2.5rem] pt-[3rem] pb-[3rem]">
-        <h1 className="text-[2rem] font-bold mb-6 text-center">Welcome Back!</h1>
-
-        <form className="space-y-5" onSubmit={handleLogin}>
-          <div>
+        <form onSubmit={handleLogin}>
+          <div className="mb-[1rem]">
             <label htmlFor="email" className="block text-sm font-semibold mb-1">Email</label>
             <input
               type="email"
@@ -81,11 +81,8 @@ const Login = () => {
             />
           </div>
 
-          <div>
-            <div className="flex items-center justify-between mb-1">
-              <label htmlFor="password" className="text-sm font-semibold">Password</label>
-              <Link href="/forgot-password" className="text-sm text-[var(--primary-black)] hover:underline">Forgot password?</Link>
-            </div>
+          <div className="mb-[0.5rem]">
+            <label htmlFor="email" className="block text-sm font-semibold mb-1">Password</label>
             <div className="relative">
               <input
                 type={showPassword ? "text" : "password"}
@@ -103,6 +100,16 @@ const Login = () => {
               </button>
             </div>
           </div>
+          <div className="flex items-center justify-between mb-[1rem]">
+              <p
+                className={`text-sm text-red-500 transition-all duration-200 font-semibold ${
+                  loginError ? "visible" : "invisible"
+                }`}
+              >
+                {loginError || "placeholder"}
+              </p>
+              <Link href="/forgot-password" className="text-sm text-[var(--primary-black)] hover:underline">Forgot password?</Link>
+          </div>
 
           <button
             type="submit"
@@ -111,8 +118,14 @@ const Login = () => {
             Log in
           </button>
         </form>
-        <h1 className="text-center my-[0.5rem]">or</h1>
+
+        <div className="flex items-center my-[1rem]">
+          <div className="flex-grow h-px bg-gray-300"></div>
+          <span className="px-3 text-gray-500 text-sm font-medium">or</span>
+          <div className="flex-grow h-px bg-gray-300"></div>
+        </div>
         <GoogleLoginButton />
+
         <div className="mt-[1.5rem] flex flex-col justify-center items-center">
           <h1>
             Don’t have an account?{" "}
