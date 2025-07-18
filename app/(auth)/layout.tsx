@@ -12,7 +12,7 @@ export default function LoginLayout({
   return (
     <html lang="en">
       <body className="flex flex-col min-h-screen">
-        <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!}>
+        <GoogleOAuthProvider clientId="1234567890-fakeid.apps.googleusercontent.com">
           <Header />
           <main className="p-5 flex-1">{children}</main>
         </GoogleOAuthProvider>

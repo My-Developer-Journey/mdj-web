@@ -1,12 +1,14 @@
-'use client'
+"use client";
 
 import { Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from 'next/navigation';
 import { useState } from "react";
-import { toast } from 'react-toastify';
 import GoogleLoginButton from "../../components/GoogleLoginButton";
 
 const SignUp = () => {
+  const router = useRouter();
+  
   const [email, setEmail] = useState("");
   const [userName, setUserName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -15,12 +17,15 @@ const SignUp = () => {
   const [confirmedPassword, setConfirmedPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmedPassword, setShowConfirmedPassword] = useState(false);
+  const [generalError, setGeneralError] = useState("");
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
+    setErrors({});
 
     if (password !== confirmedPassword) {
-      toast.error("Passwords do not match!");
+      setErrors((prev) => ({ ...prev, confirmedPassword: "Passwords do not match." }));
       return;
     }
 
@@ -38,46 +43,41 @@ const SignUp = () => {
           password,
           phoneNumber,
           confirmedPassword,
-          role: 1
+          role: 1,
         }),
       });
 
       const result = await res.json();
 
       if (!res.ok) {
-        console.log(result)
-        console.log(JSON.stringify({
-          email,
-          userName,
-          gender,
-          password,
-          phoneNumber,
-          confirmedPassword,
-          role: 1
-        }))
-        toast.error(result.message || "Sign up failed");
+        if (result?.data) {
+          setErrors(result.data);
+        }
+
+        setGeneralError(result.message || "Sign up failed");
         return;
       }
 
-      toast.success(result.message || "Sign up successful. Please verify your email!");
-
+      router.push("/email-sent?from=signup");
     } catch (err) {
-      toast.error("Something went wrong");
+      setGeneralError("Something went wrong");
     }
+
   };
 
   return (
     <div className="mt-[8rem] flex flex-col justify-center items-center">
-      <Link href="/">
-        <img src="/logo.png" alt="Logo" className="h-10 w-auto cursor-pointer" />
-      </Link>
-
-      <div className="border border-gray-300 w-[30rem] my-[2rem] rounded-xl px-[2.5rem] pt-[3rem] pb-[3rem]">
-        <h1 className="text-[2rem] font-bold mb-6 text-center">Create an account!</h1>
+      <div className="border border-gray-300 w-[30rem] mb-[2rem] rounded-xl px-[2.5rem] pt-[3rem] pb-[3rem]">
+        <h1 className="text-[2rem] font-bold mb-1 text-center">Create an account!</h1>
+        <h1 className="text-[0.875rem] font-medium mb-6 text-center text-gray-500">
+          Enter your account information to create an account
+        </h1>
 
         <form className="space-y-5" onSubmit={handleSignUp}>
           <div>
-            <label htmlFor="email" className="block text-sm font-semibold mb-1">Email*</label>
+            <label htmlFor="email" className="block text-sm font-semibold mb-1">
+              Email*
+            </label>
             <input
               type="email"
               id="email"
@@ -86,6 +86,7 @@ const SignUp = () => {
               placeholder="you@example.com"
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
+            {errors.email && <p className="text-sm text-red-500 transition-all duration-200 font-semibold mt-1">{errors.email}</p>}
           </div>
 
           <div>
@@ -112,6 +113,7 @@ const SignUp = () => {
               placeholder="0123456789"
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
+            {errors.phoneNumber && <p className="text-sm text-red-500 transition-all duration-200 font-semibold mt-1">{errors.phoneNumber}</p>}
           </div>
 
           <div>
@@ -131,7 +133,9 @@ const SignUp = () => {
           </div>
 
           <div>
-            <label htmlFor="password" className="text-sm font-semibold mb-1">Password*</label>
+            <label htmlFor="password" className="text-sm font-semibold mb-1">
+              Password*
+            </label>
             <div className="relative">
               <input
                 type={showPassword ? "text" : "password"}
@@ -143,7 +147,7 @@ const SignUp = () => {
               />
               <button
                 type="button"
-                onClick={() => setShowPassword(prev => !prev)}
+                onClick={() => setShowPassword((prev) => !prev)}
                 className="absolute top-1/2 right-3 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 cursor-pointer"
               >
                 {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
@@ -152,7 +156,9 @@ const SignUp = () => {
           </div>
 
           <div>
-            <label htmlFor="confirmedPassword" className="text-sm font-semibold mb-1">Confirmed Password*</label>
+            <label htmlFor="confirmedPassword" className="text-sm font-semibold mb-1">
+              Confirmed Password*
+            </label>
             <div className="relative">
               <input
                 type={showConfirmedPassword ? "text" : "password"}
@@ -164,14 +170,18 @@ const SignUp = () => {
               />
               <button
                 type="button"
-                onClick={() => setShowConfirmedPassword(prev => !prev)}
+                onClick={() => setShowConfirmedPassword((prev) => !prev)}
                 className="absolute top-1/2 right-3 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 cursor-pointer"
               >
                 {showConfirmedPassword ? <EyeOff size={18} /> : <Eye size={18} />}
               </button>
             </div>
+            {errors.confirmedPassword && <p className="text-sm text-red-500 transition-all duration-200 font-semibold mt-1">{errors.confirmedPassword}</p>}
           </div>
 
+          {generalError && (
+            <p className="text-left text-sm text-red-500 transition-all duration-200 font-semibold">{generalError}</p>
+          )}
           <button
             type="submit"
             className="w-full bg-[var(--primary-black)] text-[var(--primary-white)] py-2 rounded-md hover:bg-gray-800 transition-all cursor-pointer"
@@ -180,12 +190,16 @@ const SignUp = () => {
           </button>
         </form>
 
-        <h1 className="text-center my-[0.5rem]">or</h1>
+        <div className="flex items-center my-[1rem]">
+          <div className="flex-grow h-px bg-gray-300"></div>
+          <span className="px-3 text-gray-500 text-sm font-medium">or</span>
+          <div className="flex-grow h-px bg-gray-300"></div>
+        </div>
         <GoogleLoginButton />
 
         <div className="mt-[1.5rem] flex flex-col justify-center items-center">
           <h1>
-            Already have an account?{" "}
+            Already have an account?{' '}
             <Link href="/login" className="text-[var(--primary-black)] hover:underline font-bold">
               Sign in
             </Link>

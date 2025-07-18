@@ -1,42 +1,31 @@
-'use client';
-
-import { GoogleLogin } from '@react-oauth/google';
+import { useGoogleLogin } from '@react-oauth/google';
 
 const GoogleLoginButton = () => {
-    const handleSuccess = async (credentialResponse: any) => {
-        const token = credentialResponse.credential;
-        if (!token) return;
+    const login = useGoogleLogin({
+        onSuccess: async (tokenResponse) => {
+        const token = tokenResponse.access_token;
 
-        try {
         const res = await fetch("http://localhost:8080/api/auth/oauth/google", {
             method: "POST",
-            headers: {
-            "Content-Type": "application/json",
-            },
+            headers: { "Content-Type": "application/json" },
             credentials: "include",
             body: JSON.stringify({ token }),
         });
 
-        if (!res.ok) {
-            const error = await res.json();
-            console.error("Google login failed:", error);
-            alert(error.message || "Google login failed");
-            return;
-        }
-
-        const data = await res.json();
-        console.log("Google login success:", data);
+        const result = await res.json();
         alert("Logged in with Google!");
-        } catch (err) {
-        console.error("Error:", err);
-        alert("Something went wrong during Google login");
-        }
-    };
+        },
+        onError: () => alert("Google login failed"),
+    });
 
     return (
-        <div className="mt-4 flex justify-center">
-            <GoogleLogin onSuccess={handleSuccess} onError={() => alert("Google login failed")} locale='en'/>
-        </div>
+        <button
+            onClick={() => login()}
+            className="flex items-center justify-center w-full border border-gray-300 py-[0.75rem] rounded-lg hover:bg-gray-100 transition cursor-pointer"
+            >
+            <img src="/google-icon.png" alt="Google" className="w-5 h-5 mr-4" />
+            <span className="text-sm font-semibold text-gray-700">Continue with Google</span>
+        </button>
     );
 };
 
