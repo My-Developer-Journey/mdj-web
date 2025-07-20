@@ -4,7 +4,7 @@ import TopPost from '../components/TopPost';
 
 const samplePosts = [
   {
-    title: 'cách update level ngôn ngữ lập trình java và các ngôn ngữ khác',
+    title: 'Cách update level ngôn ngữ lập trình java và các ngôn ngữ khác',
     author: 'Lâm Doanh',
     views: 140,
     likes: 1,
@@ -18,7 +18,7 @@ const samplePosts = [
     comments: 0,
   },
   {
-    title: 'cách sử dụng ransackable_scopes trong ROR',
+    title: 'Cách sử dụng ransackable_scopes trong ROR',
     author: 'Tô Tiến Toàn',
     views: 78,
     likes: 2,
@@ -30,7 +30,7 @@ export default function Home() {
   const posts = [1, 2, 3, 4].map((id) => ({ id }));
   const authors = [1, 2, 3, 4].map((id) => ({ id }));
   return (
-    <div className="mt-[8rem] flex gap-[5rem] px-12">
+    <div className="flex gap-[5rem]">
       <div className="w-2/3">
         <section className="mb-12">
           <h2 className="text-2xl font-bold mb-6">Recent Posts</h2>

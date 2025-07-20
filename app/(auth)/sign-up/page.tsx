@@ -5,12 +5,14 @@ import Link from "next/link";
 import { useRouter } from 'next/navigation';
 import { useState } from "react";
 import GoogleLoginButton from "../../components/GoogleLoginButton";
+import { useLoading } from '../../contexts/LoadingContext';
 
 const SignUp = () => {
   const router = useRouter();
+  const { setLoading } = useLoading();
   
   const [email, setEmail] = useState("");
-  const [userName, setUserName] = useState("");
+  const [displayName, setDisplayName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [gender, setGender] = useState("");
   const [password, setPassword] = useState("");
@@ -22,48 +24,53 @@ const SignUp = () => {
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
     setErrors({});
+    setGeneralError("");
 
     if (password !== confirmedPassword) {
-      setErrors((prev) => ({ ...prev, confirmedPassword: "Passwords do not match." }));
-      return;
+        setErrors((prev) => ({ ...prev, confirmedPassword: "Passwords do not match." }));
+        setLoading(false);
+        return;
     }
 
     try {
-      const res = await fetch("http://localhost:8080/api/authentications/sign-up", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify({
-          email,
-          userName,
-          gender,
-          password,
-          phoneNumber,
-          confirmedPassword,
-          role: 1,
-        }),
-      });
+        const res = await fetch("http://localhost:8080/api/authentications/sign-up", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            credentials: "include",
+            body: JSON.stringify({
+                email,
+                displayName,
+                gender,
+                password,
+                phoneNumber,
+                confirmedPassword,
+                role: 1,
+            }),
+        });
 
-      const result = await res.json();
+        const result = await res.json();
 
-      if (!res.ok) {
-        if (result?.data) {
-          setErrors(result.data);
+        if (!res.ok) {
+            if (result?.data) {
+                setErrors(result.data);
+            }
+            setGeneralError(result.message || "Sign up failed");
+            return;
         }
 
-        setGeneralError(result.message || "Sign up failed");
-        return;
-      }
-
-      router.push("/email-sent?from=signup");
+        router.push("/email-sent?from=signup");
     } catch (err) {
-      setGeneralError("Something went wrong");
+        console.error("Signup error:", err);
+        setGeneralError("Something went wrong");
+    } finally {
+        setLoading(false);
     }
-
   };
+
 
   return (
     <div className="mt-[8rem] flex flex-col justify-center items-center">
@@ -90,13 +97,13 @@ const SignUp = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-semibold mb-1">UserName*</label>
+            <label className="block text-sm font-semibold mb-1">Display Name*</label>
             <input
               type="text"
               id="userName"
               required
-              value={userName}
-              onChange={(e) => setUserName(e.target.value)}
+              value={displayName}
+              onChange={(e) => setDisplayName(e.target.value)}
               placeholder="diemyolo"
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
