@@ -6,10 +6,12 @@ import { useRouter } from 'next/navigation';
 import { useState } from "react";
 import GoogleLoginButton from "../../components/GoogleLoginButton";
 import { useAuth } from '../../contexts/AuthContext';
+import { useLoading } from '../../contexts/LoadingContext';
 
 const Login = () => {
   const router = useRouter();
   const { setUser } = useAuth();
+  const { setLoading } = useLoading();
   
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -17,50 +19,50 @@ const Login = () => {
   const [loginError, setLoginError] = useState("");
 
   const handleLogin = async (e: React.FormEvent) => {
-        e.preventDefault();
+    e.preventDefault();
+    setLoading(true);
 
-        try {
-            const res = await fetch("http://localhost:8080/api/authentications/sign-in", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                credentials: "include",
-                body: JSON.stringify({
-                    email,
-                    password,
-                }),
-            });
+    try {
+        const res = await fetch("http://localhost:8080/api/authentications/sign-in", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            credentials: "include",
+            body: JSON.stringify({ email, password }),
+        });
 
-            if (!res.ok) {
-              const error = await res.json();
-              if (error.message === "Internal server error: Your account is not verified. A new verification email has been sent.") {
+        if (!res.ok) {
+            const error = await res.json();
+            if (error.message === "Internal server error: Your account is not verified. A new verification email has been sent.") {
                 router.push("/email-sent?from=login");
                 return;
-              }
-              setLoginError(error.message || "Login failed");
-              return;
             }
-
-            const userRes = await fetch('http://localhost:8080/api/users/profile', {
-                credentials: 'include',
-            });
-
-            if (userRes.ok) {
-                const userData = await userRes.json();
-                setUser(userData);
-                setLoginError("");
-            } else {
-                setUser(null);
-            }
-
-            router.push("/");
-
-        } catch (err) {
-            console.error("Login error:", err);
-            setLoginError("Something went wrong!");
+            setLoginError(error.message || "Login failed");
+            return;
         }
-    };
+
+        const userRes = await fetch("http://localhost:8080/api/users/profile", {
+            credentials: "include",
+        });
+
+        if (userRes.ok) {
+            const userData = await userRes.json();
+            setUser(userData.data);
+            setLoginError("");
+            router.push("/");
+        } else {
+            setUser(null);
+            setLoginError("Unable to load user profile.");
+        }
+    } catch (err) {
+        console.error("Login error:", err);
+        setLoginError("Something went wrong!");
+    } finally {
+        setLoading(false);
+    }
+  };
+
 
 
   return (

@@ -13,14 +13,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="flex flex-col min-h-screen">
+      <body className="flex flex-col min-h-screen min-w-[80rem] max-w-[100rem] mx-auto">
         <AuthProvider>
           <LoadingProvider>
             <Header/>
-            <main className="p-5 flex-1">{children}</main>
+            <main className="py-5 px-[5rem] mt-[8rem] flex-1">{children}</main>
             <ToastContainer
               toastClassName="font-medium min-h-[4rem] rounded-lg shadow-md"
-              position="top-left"
+              position="top-right"
               autoClose={3000}
               hideProgressBar={false}
               newestOnTop={true}

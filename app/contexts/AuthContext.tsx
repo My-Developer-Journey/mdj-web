@@ -4,7 +4,7 @@ import { createContext, useContext, useEffect, useState } from 'react';
 
 type User = {
     email: string;
-    userName: string;
+    displayName: string;
     phoneNumber: string;
     avatar?: string;
     bio?: string;
@@ -39,8 +39,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                 });
 
                 if (res.ok) {
-                    const data = await res.json();
-                    setUser(data);
+                    const userData = await res.json();
+                    setUser(userData.data);
                 } else {
                     setUser(null);
                 }
