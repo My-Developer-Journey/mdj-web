@@ -22,16 +22,16 @@ export default function TopPost({
         </h3>
         <div className="flex items-center gap-4 text-sm text-gray-500 mt-1">
             <div className="flex items-center gap-1">
-            <ThumbsUp size={14} />
-            <span>{likes}</span>
+                <ThumbsUp size={14} />
+                <span>{likes}</span>
             </div>
             <div className="flex items-center gap-1">
-            <Eye size={14} />
-            <span>{views}</span>
+                <Eye size={14} />
+                <span>{views}</span>
             </div>
             <div className="flex items-center gap-1">
-            <MessageCircle size={14} />
-            <span>{comments}</span>
+                <MessageCircle size={14} />
+                <span>{comments}</span>
             </div>
         </div>
         <p className="text-sm text-gray-600 mt-1">{author}</p>

@@ -1,5 +1,6 @@
 'use client'
 
+import { api } from "@/util/api";
 import { Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from 'next/navigation';
@@ -23,28 +24,27 @@ const Login = () => {
     setLoading(true);
 
     try {
-        const res = await fetch("http://localhost:8080/api/authentications/sign-in", {
+        const res = await api("/authentications/sign-in", {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            credentials: "include",
             body: JSON.stringify({ email, password }),
         });
 
         if (!res.ok) {
             const error = await res.json();
-            if (error.message === "Internal server error: Your account is not verified. A new verification email has been sent.") {
+
+            if (
+                error.message ===
+                "Internal server error: Your account is not verified. A new verification email has been sent."
+            ) {
                 router.push("/email-sent?from=login");
                 return;
             }
+
             setLoginError(error.message || "Login failed");
             return;
         }
 
-        const userRes = await fetch("http://localhost:8080/api/users/profile", {
-            credentials: "include",
-        });
+        const userRes = await api("/users/profile");
 
         if (userRes.ok) {
             const userData = await userRes.json();
@@ -62,6 +62,7 @@ const Login = () => {
         setLoading(false);
     }
   };
+
 
 
 

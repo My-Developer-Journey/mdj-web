@@ -2,7 +2,16 @@ import Image from "next/image";
 import Link from "next/link";
 import { Card, CardContent } from "../components/card";
 
-const PostItem = ({ post }: { post: any }) => {
+interface Post {
+    thumbnail?: string;
+    slug: string;
+    title?: string;
+    author?: string;
+    date?: string;
+    excerpt?: string;
+}
+
+const PostItem = ({ post }: { post: Post }) => {
     return (
         <Card className="overflow-hidden">
             <Image
