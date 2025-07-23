@@ -1,5 +1,6 @@
 'use client'
 
+import Image from "next/image";
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -12,8 +13,6 @@ export default function Header() {
     const router = useRouter();
     const { setLoading } = useLoading();
     const { user, isLoading, setUser } = useAuth();
-
-    console.log(user);
 
     const [showDropdown, setShowDropdown] = useState(false)
 
@@ -40,6 +39,7 @@ export default function Header() {
         }, 2000);
 
     } catch (err) {
+        console.log(err);
         toast.error("Something went wrong");
     } finally {
         setTimeout(() => setLoading(false), 2000);
@@ -68,7 +68,7 @@ export default function Header() {
             <div className="min-w-[80rem] max-w-[100rem] mx-auto py-[1.5rem] px-[5rem] flex items-center justify-between bg-gray-100 shadow-md">
                 {/* Logo */}
                 <Link href="/">
-                    <img src="/logo.png" alt="Logo" className="h-10 w-auto cursor-pointer" />
+                    <Image height="0" width="0" src="/logo.png" alt="Logo" className="h-10 w-auto cursor-pointer" />
                 </Link>
 
                 {/* Search */}
@@ -92,8 +92,10 @@ export default function Header() {
                         ) : (
                             user ? (
                                 <div className="relative">
-                                    <img
+                                    <Image
                                         src={user.avatar || '/default-avatar.png'}
+                                        height="0"
+                                        width="0"
                                         alt="Avatar"
                                         onClick={(e) => {
                                             e.stopPropagation();

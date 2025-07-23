@@ -17,12 +17,6 @@ type MyAccountCardProps = {
 
 const MyAccountCard = ({
   name,
-  role,
-  department,
-  staffId,
-  staffAccount,
-  phone,
-  email,
   avatarUrl,
 }: MyAccountCardProps) => {
   return (

@@ -8,8 +8,8 @@ const MyPostStatistic = () => {
                 <div className="flex items-center justify-between w-full gap-[1.5rem]">
                     {/* Tổng số bài viết */}
                     <div className="w-1/2 text-center">
-                        <div className="text-5xl font-bold text-gray-800 mb-2">128</div>
-                        <div className="text-md text-gray-500">Total Posts</div>
+                        <div className="text-4xl font-bold text-gray-800 mb-2">128</div>
+                        <div className="text-sm text-gray-500">Total Posts</div>
                     </div>
 
                     {/* Divider */}
@@ -17,8 +17,8 @@ const MyPostStatistic = () => {
 
                     {/* Tổng số bình luận */}
                     <div className="w-1/2 text-center">
-                        <div className="text-5xl font-bold text-gray-800 mb-2">342</div>
-                        <div className="text-md text-gray-500">Total Comments</div>
+                        <div className="text-4xl font-bold text-gray-800 mb-2">342</div>
+                        <div className="text-sm text-gray-500">Total Comments</div>
                     </div>
                 </div>
             </CardContent>

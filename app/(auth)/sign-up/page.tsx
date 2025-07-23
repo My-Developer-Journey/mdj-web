@@ -1,5 +1,6 @@
 "use client";
 
+import { api } from "@/util/api";
 import { Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from 'next/navigation';
@@ -35,12 +36,8 @@ const SignUp = () => {
     }
 
     try {
-        const res = await fetch("http://localhost:8080/api/authentications/sign-up", {
+        const res = await api("/authentications/sign-up", {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            credentials: "include",
             body: JSON.stringify({
                 email,
                 displayName,
