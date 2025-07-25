@@ -23,7 +23,7 @@ const MyAccountCard = ({
     <Card className="w-full px-[2rem] py-[1rem] h-full">
       <CardContent className="flex gap-6 items-center justify-between">
         {/* Avatar + Name */}
-        <div className="flex gap-[3rem] items-center w-2/3">
+        <div className="flex gap-[2rem] items-center w-2/3">
           <Image
             src={avatarUrl}
             alt="Avatar"

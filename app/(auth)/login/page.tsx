@@ -107,7 +107,7 @@ const Login = () => {
               <p
                 className={`text-sm text-red-500 transition-all duration-200 font-semibold ${
                   loginError ? "visible" : "invisible"
-                }`}
+                } truncate max-w-full`}
               >
                 {loginError || "placeholder"}
               </p>
