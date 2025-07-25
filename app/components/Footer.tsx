@@ -6,7 +6,7 @@ export default function Footer() {
         <footer className="bg-[var(--primary-black)] text-gray-300 px-10 py-12 mt-12">
             <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-5 gap-8">
                 <div className="col-span-1">
-                    <Image height="0" width="0" src="/logo-alt.png" alt="Logo" className="h-10 w-auto mb-4" />
+                    <Image height="40" width="120" src="/logo-alt.png" alt="Logo" className="h-10 w-auto mb-4" />
                 </div>
 
                 <div>

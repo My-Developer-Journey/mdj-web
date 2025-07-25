@@ -68,7 +68,7 @@ export default function Header() {
             <div className="min-w-[80rem] max-w-[100rem] mx-auto py-[1.5rem] px-[5rem] flex items-center justify-between bg-gray-100 shadow-md">
                 {/* Logo */}
                 <Link href="/">
-                    <Image height="0" width="0" src="/logo.png" alt="Logo" className="h-10 w-auto cursor-pointer" />
+                    <Image height="40" width="120" src="/logo.png" alt="Logo" className="h-10 w-auto cursor-pointer" />
                 </Link>
 
                 {/* Search */}
@@ -94,8 +94,7 @@ export default function Header() {
                                 <div className="relative">
                                     <Image
                                         src={user.avatar || '/default-avatar.png'}
-                                        height="0"
-                                        width="0"
+                                        height="40" width="120"
                                         alt="Avatar"
                                         onClick={(e) => {
                                             e.stopPropagation();
