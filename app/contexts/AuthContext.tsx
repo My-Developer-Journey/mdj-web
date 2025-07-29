@@ -1,5 +1,6 @@
 'use client';
 
+import { api } from '@/util/api';
 import { createContext, useContext, useEffect, useState } from 'react';
 
 type User = {
@@ -34,9 +35,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     useEffect(() => {
         const fetchMe = async () => {
             try {
-                const res = await fetch('http://localhost:8080/api/users/profile', {
-                    credentials: 'include',
-                });
+                const res = await api("/users/profile");
 
                 if (res.ok) {
                     const userData = await res.json();

@@ -94,13 +94,13 @@ export default function Header() {
                                 <div className="relative">
                                     <Image
                                         src={user.avatar || '/default-avatar.png'}
-                                        height="40" width="120"
+                                        height="100" width="100"
                                         alt="Avatar"
                                         onClick={(e) => {
                                             e.stopPropagation();
                                             setShowDropdown(prev => !prev);
                                         }}
-                                        className="w-10 h-10 rounded-full cursor-pointer"
+                                        className="rounded-full object-cover w-10 h-10 cursor-pointer"
                                     />
                                     {showDropdown && (
                                         <div className="absolute right-0 top-12 bg-white shadow-lg rounded-md py-2 w-48 z-50">
