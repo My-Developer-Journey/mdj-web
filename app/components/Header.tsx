@@ -1,5 +1,6 @@
 'use client'
 
+import { api } from "@/util/api";
 import Image from "next/image";
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
@@ -21,9 +22,8 @@ export default function Header() {
     const handleLogout = async () => {
     setLoading(true);
     try {
-        const res = await fetch('http://localhost:8080/api/authentications/logout', {
+        const res = await api('/authentications/logout', {
             method: 'POST',
-            credentials: 'include'
         });
 
         const data = await res.json();

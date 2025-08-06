@@ -8,6 +8,11 @@ const nextConfig: NextConfig = {
         hostname: "blog-api-uploaded-files.s3.amazonaws.com",
         pathname: "**",
       },
+      {
+        protocol: "https",
+        hostname: "lh3.googleusercontent.com",
+        pathname: "**",
+      },
     ],
   },
 };
