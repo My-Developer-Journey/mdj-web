@@ -44,7 +44,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                     setUser(null);
                 }
             } catch (err) {
-                console.error('Error fetching user:', err);
+                console.error('No user to fetch:', err);
                 setUser(null);
             } finally {
                 setIsLoading(false);
