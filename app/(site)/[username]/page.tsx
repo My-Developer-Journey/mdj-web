@@ -4,10 +4,10 @@ import MyAccountCard from "@/app/components/MyAccountCard"
 import MyPersonalInfo from "@/app/components/MyPersonalInfo"
 import MyPostStatistic from "@/app/components/MyPostStatistic"
 import { useAuth } from '../../contexts/AuthContext';
-import { useLoading } from '@/app/contexts/LoadingContext';
+//import { useLoading } from '@/app/contexts/LoadingContext';
 
 const Profile = () => {
-  const { user, isLoading, setUser } = useAuth();
+  const { user} = useAuth();
   console.log(user);
   return (
     <div>

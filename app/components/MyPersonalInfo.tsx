@@ -7,7 +7,7 @@ import EditPersonalInfoModal from './EditPersonalInfoModal';
 
 type PersonalInfoProps = {
     gender: string
-    bio: string
+    bio?: string
     name: string
     phone: string
     email: string

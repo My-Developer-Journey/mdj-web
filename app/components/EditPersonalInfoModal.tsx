@@ -2,21 +2,25 @@
 type EditPersonalInfoModalProps = {
   isModalOpen: boolean;
   onClose: () => void;
-  info: {
-    gender: string;
-    dob: string;
-    identifyCode: string;
-    hometown: string;
-    nationality: string;
-    religion: string;
-    language: string;
-    maritalStatus: string;
-    permanentAddress: string;
-    currentAddress: string;
-  };
+  gender: string; // <-- thêm dòng này nếu chưa có
+  name: string;
+  phone: string;
+  email: string;
+  facebookUrl?: string;
+  githubUrl?: string;
 };
 
-const EditPersonalInfoModal = ({ isModalOpen, onClose, info }: EditPersonalInfoModalProps) => {
+const EditPersonalInfoModal = ({
+    isModalOpen,
+    onClose,
+    gender,
+    // bio,
+    // name,
+    // phone,
+    // email,
+    // facebookUrl,
+    // githubUrl,
+}: EditPersonalInfoModalProps) => {
     if (!isModalOpen) return null;
 
     return (
@@ -38,27 +42,7 @@ const EditPersonalInfoModal = ({ isModalOpen, onClose, info }: EditPersonalInfoM
                     }}
                     className="flex-1"
                 >
-                    <div className="text-sm mb-2">Gender: {info.gender}</div>
-                    <div className="text-sm mb-2">DOB: {info.dob}</div>
-                    <div className="text-sm mb-2">DOB: {info.dob}</div>
-                    <div className="text-sm mb-2">DOB: {info.dob}</div>
-                    <div className="text-sm mb-2">DOB: {info.dob}</div>
-                    <div className="text-sm mb-2">DOB: {info.dob}</div>
-                    <div className="text-sm mb-2">DOB: {info.dob}</div>
-                    <div className="text-sm mb-2">DOB: {info.dob}</div>
-                    <div className="text-sm mb-2">DOB: {info.dob}</div>
-                    <div className="text-sm mb-2">DOB: {info.dob}</div>
-                    <div className="text-sm mb-2">DOB: {info.dob}</div>
-                    <div className="text-sm mb-2">DOB: {info.dob}</div>
-                    <div className="text-sm mb-2">DOB: {info.dob}</div>
-                    <div className="text-sm mb-2">DOB: {info.dob}</div>
-                    <div className="text-sm mb-2">DOB: {info.dob}</div>
-                    <div className="text-sm mb-2">DOB: {info.dob}</div>
-                    <div className="text-sm mb-2">DOB: {info.dob}</div>
-                    <div className="text-sm mb-2">DOB: {info.dob}</div>
-                    <div className="text-sm mb-2">DOB: {info.dob}</div>
-                    <div className="text-sm mb-2">DOB: {info.dob}</div>
-                    <div className="text-sm mb-2">DOB: {info.dob}</div>
+                    <div className="text-sm mb-2">Gender: {gender}</div>
                 </div>
 
                 {/* Fixed Footer */}
