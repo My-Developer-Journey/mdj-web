@@ -1,6 +1,7 @@
 'use client'
 
 import { api } from "@/util/api";
+import { Bell, PencilLine } from "lucide-react";
 import Image from "next/image";
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
@@ -91,28 +92,59 @@ export default function Header() {
                             <div className="w-24 h-10 bg-gray-300 animate-pulse rounded-md"></div>
                         ) : (
                             user ? (
-                                <div className="relative">
-                                    <Image
-                                        src={user.avatar || '/default-avatar.png'}
-                                        height="100" width="100"
+                                <div className="flex items-center gap-[1.5rem] ml-[1rem]">
+                                    <div className="relative group cursor-pointer">
+                                        <Link href="/post/create" className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100">
+                                            <PencilLine className="w-5 h-5 text-gray-700" />
+                                        </Link>
+                                        <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 whitespace-nowrap 
+                                                        bg-black text-white text-xs rounded px-2 py-1 opacity-0 
+                                                        group-hover:opacity-100 transition-opacity duration-200 z-50">
+                                        Write post
+                                        </div>
+                                    </div>
+
+                                    <div className="relative group cursor-pointer">
+                                        <Link href="/notifications" className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100">
+                                            <Bell className="w-5 h-5 text-gray-700" />
+                                        </Link>
+                                        <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 whitespace-nowrap 
+                                                        bg-black text-white text-xs rounded px-2 py-1 opacity-0 
+                                                        group-hover:opacity-100 transition-opacity duration-200 z-50">
+                                            Notifications
+                                        </div>
+                                    </div>
+
+                                    {/* Avatar + Dropdown */}
+                                    <div className="relative">
+                                        <Image
+                                        src={user.avatar || "/default-avatar.png"}
+                                        height={100}
+                                        width={100}
                                         alt="Avatar"
                                         onClick={(e) => {
                                             e.stopPropagation();
-                                            setShowDropdown(prev => !prev);
+                                            setShowDropdown((prev) => !prev);
                                         }}
                                         className="rounded-full object-cover w-10 h-10 cursor-pointer"
-                                    />
-                                    {showDropdown && (
+                                        />
+                                        {showDropdown && (
                                         <div className="absolute right-0 top-12 bg-white shadow-lg rounded-md py-2 w-48 z-50">
-                                            <Link href={`/${user?.displayName}`} className="block px-4 py-2 hover:bg-gray-100 cursor-pointer">Profile</Link>
-                                            <button
-                                                onClick={handleLogout}
-                                                className="block w-full text-left px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                                            <Link
+                                            href={`/${user?.displayName}`}
+                                            className="block px-4 py-2 hover:bg-gray-100 cursor-pointer"
                                             >
-                                                Logout
+                                            Profile
+                                            </Link>
+                                            <button
+                                            onClick={handleLogout}
+                                            className="block w-full text-left px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                                            >
+                                            Logout
                                             </button>
                                         </div>
-                                    )}
+                                        )}
+                                    </div>
                                 </div>
                             ) : (
                                 <div className="flex gap-2">
