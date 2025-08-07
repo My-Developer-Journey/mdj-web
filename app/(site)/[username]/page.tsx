@@ -1,8 +1,8 @@
 'use client'
 
-import MyAccountCard from "@/app/components/MyAccountCard"
-import MyPersonalInfo from "@/app/components/MyPersonalInfo"
-import MyPostStatistic from "@/app/components/MyPostStatistic"
+import MyAccountCard from "@/app/components/MyAccountCard";
+import MyPersonalInfo from "@/app/components/MyPersonalInfo";
+import MyPostStatistic from "@/app/components/MyPostStatistic";
 import { useAuth } from '../../contexts/AuthContext';
 //import { useLoading } from '@/app/contexts/LoadingContext';
 
@@ -11,7 +11,7 @@ const Profile = () => {
   console.log(user);
   return (
     <div>
-      { user && 
+      { user &&
       <div>
         <div className="flex justify-center items-stretch gap-[2rem]">
           <div className="w-[70%] h-[144px]">

@@ -1,19 +1,10 @@
 'use client'
 
+import { PersonalInfoProps } from '@/app/types/account';
 import { Pencil } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Card, CardContent } from './card';
 import EditPersonalInfoModal from './EditPersonalInfoModal';
-
-type PersonalInfoProps = {
-    gender: string
-    bio?: string
-    name: string
-    phone: string
-    email: string
-    facebookUrl?: string
-    githubUrl?: string
-};
 
 const PersonalInfo = ({
     gender,
@@ -54,11 +45,17 @@ const PersonalInfo = ({
                     </div>
                     <div>
                         <span className="font-medium text-gray-400">Gender:</span>
-                        <div className="font-bold">{gender.charAt(0).toUpperCase() + gender.slice(1).toLowerCase()}</div>
+                        <div className="font-bold">
+                            {gender
+                                ? gender
+                                : <span className="text-gray-400">Not set</span>}
+                        </div>
                     </div>
                     <div>
                         <span className="font-medium text-gray-400">Phone Number:</span>
-                        <div className="font-bold">{phone}</div>
+                        <div className="font-bold">
+                            {phone ? phone : <span className="text-gray-400">Not set</span>}
+                        </div>
                     </div>
                     <div className="col-span-2">
                         <span className="font-medium text-gray-400">Facebook Link:</span>

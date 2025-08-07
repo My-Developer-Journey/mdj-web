@@ -1,14 +1,4 @@
-
-type EditPersonalInfoModalProps = {
-  isModalOpen: boolean;
-  onClose: () => void;
-  gender: string; // <-- thêm dòng này nếu chưa có
-  name: string;
-  phone: string;
-  email: string;
-  facebookUrl?: string;
-  githubUrl?: string;
-};
+import { EditPersonalInfoModalProps } from '@/app/types/account';
 
 const EditPersonalInfoModal = ({
     isModalOpen,
