@@ -1,14 +1,18 @@
 'use client'
 
-import { MyAccountCardProps } from '@/app/types/account';
+import { UserType } from '@/app/types/account';
 import Image from "next/image";
 import { FaFacebook, FaGithub } from "react-icons/fa";
 import { Card, CardContent } from "./card";
 
+type MyAccountCardProps = Pick<UserType, 
+  'displayName' | 'email' | 'facebookUrl' | 'githubUrl' | 'createdDate' | 'avatar'
+>;
+
 const MyAccountCard = ({
-  name,
+  displayName,
   email,
-  avatarUrl,
+  avatar,
   facebookUrl,
   githubUrl,
   createdDate,
@@ -19,14 +23,14 @@ const MyAccountCard = ({
         {/* Avatar + Name */}
         <div className="flex gap-[2rem] items-center w-2/3">
           <Image
-            src={avatarUrl || '/default-avatar.png'}
+            src={avatar || '/default-avatar.png'}
             alt="Avatar"
             width={80}
             height={80}
             className="rounded-full object-cover"
           />
           <div>
-            <h2 className="font-semibold text-2xl mb-[0.35rem]">{name}</h2>
+            <h2 className="font-semibold text-2xl mb-[0.35rem]">{displayName}</h2>
             <p className="text-md">
               <span className="text-sky-600 font-medium">{email}</span>{" "}
               <span className="text-gray-500">| Join in: {new Date(createdDate).toLocaleDateString('en-GB')}</span>
