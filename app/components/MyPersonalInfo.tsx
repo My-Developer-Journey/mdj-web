@@ -1,20 +1,24 @@
 'use client'
 
-import { PersonalInfoProps } from '@/app/types/account';
+import { UserType } from '@/app/types/account';
 import { Pencil } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Card, CardContent } from './card';
 import EditPersonalInfoModal from './EditPersonalInfoModal';
 
+type MyPersonalInfoProps = Pick<UserType, 
+  'displayName' | 'bio' | 'gender' | 'phoneNumber' | 'email' | 'facebookUrl' | 'githubUrl'
+>;
+
 const PersonalInfo = ({
     gender,
     bio,
-    name,
-    phone,
+    displayName,
+    phoneNumber,
     email,
     facebookUrl,
     githubUrl,
-}: PersonalInfoProps) => {
+}: MyPersonalInfoProps) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     useEffect(() => {
@@ -41,7 +45,7 @@ const PersonalInfo = ({
                     </div>
                     <div>
                         <span className="font-medium text-gray-400">Display name:</span>
-                        <div className="font-bold">{name}</div>
+                        <div className="font-bold">{displayName}</div>
                     </div>
                     <div>
                         <span className="font-medium text-gray-400">Gender:</span>
@@ -54,7 +58,7 @@ const PersonalInfo = ({
                     <div>
                         <span className="font-medium text-gray-400">Phone Number:</span>
                         <div className="font-bold">
-                            {phone ? phone : <span className="text-gray-400">Not set</span>}
+                            {phoneNumber ? phoneNumber : <span className="text-gray-400">Not set</span>}
                         </div>
                     </div>
                     <div className="col-span-2">
@@ -80,8 +84,8 @@ const PersonalInfo = ({
                     isModalOpen={isModalOpen}
                     onClose={() => setIsModalOpen(false)}
                     gender={gender}
-                    name={name}
-                    phone={phone}
+                    displayName={displayName}
+                    phoneNumber={phoneNumber}
                     email={email}
                     facebookUrl={facebookUrl}
                     githubUrl={githubUrl}

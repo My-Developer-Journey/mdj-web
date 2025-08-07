@@ -16,9 +16,9 @@ const Profile = () => {
         <div className="flex justify-center items-stretch gap-[2rem]">
           <div className="w-[70%] h-[144px]">
             <MyAccountCard
-              name={user?.displayName}
+              displayName={user?.displayName}
               email={user?.email}
-              avatarUrl={user?.avatar}
+              avatar={user?.avatar}
               facebookUrl={user?.facebookUrl}
               githubUrl={user?.githubUrl}
               createdDate={user?.createdDate}
@@ -31,10 +31,10 @@ const Profile = () => {
         <div className="flex justify-center items-stretch gap-[2rem] mt-[4rem]">
           <div className="w-[40%]">
             <MyPersonalInfo
-              name={user?.displayName}
+              displayName={user?.displayName}
               bio={user?.bio}
               gender={user?.gender}
-              phone={user?.phoneNumber}
+              phoneNumber={user?.phoneNumber}
               email={user?.email}
               facebookUrl={user?.facebookUrl}
               githubUrl={user?.githubUrl}
