@@ -1,17 +1,9 @@
 'use client'
 
+import { MyAccountCardProps } from '@/app/types/account';
 import Image from "next/image";
 import { FaFacebook, FaGithub } from "react-icons/fa";
 import { Card, CardContent } from "./card";
-
-type MyAccountCardProps = {
-  name: string
-  email: string
-  avatarUrl?: string
-  facebookUrl?: string
-  githubUrl?: string
-  createdDate: string
-}
 
 const MyAccountCard = ({
   name,
@@ -60,7 +52,7 @@ const MyAccountCard = ({
                 {facebookUrl.replace(/^https?:\/\/(www\.)?/, '')}
               </a>
             ) : (
-              <span className="text-gray-400">Not set</span>
+              <span className="text-gray-300">Not set</span>
             )}
           </div>
 
@@ -77,7 +69,7 @@ const MyAccountCard = ({
                 {githubUrl.replace(/^https?:\/\/(www\.)?/, '')}
               </a>
             ) : (
-              <span className="text-gray-400">Not set</span>
+              <span className="text-gray-300">Not set</span>
             )}
           </div>
         </div>
