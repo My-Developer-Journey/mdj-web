@@ -14,6 +14,7 @@ type User = {
     gender: 'MALE' | 'FEMALE' | 'OTHER';
     status: 'ACTIVE' | 'INACTIVE' | 'BANNED';
     role: 'USER' | 'ADMIN' | 'MOD';
+    createdDate: string;
 };
 
 type AuthContextType = {

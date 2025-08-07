@@ -6,30 +6,28 @@ import { Card, CardContent } from './card';
 import EditPersonalInfoModal from './EditPersonalInfoModal';
 
 type PersonalInfoProps = {
-    info: {
-        gender: string;
-        dob: string;
-        identifyCode: string;
-        hometown: string;
-        nationality: string;
-        religion: string;
-        language: string;
-        maritalStatus: string;
-        permanentAddress: string;
-        currentAddress: string;
-    };
+    gender: string
+    bio?: string
+    name: string
+    phone: string
+    email: string
+    facebookUrl?: string
+    githubUrl?: string
 };
 
-const PersonalInfo = ({ info }: PersonalInfoProps) => {
+const PersonalInfo = ({
+    gender,
+    bio,
+    name,
+    phone,
+    email,
+    facebookUrl,
+    githubUrl,
+}: PersonalInfoProps) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     useEffect(() => {
-        if (isModalOpen) {
-            document.body.classList.add('overflow-hidden');
-        } else {
-            document.body.classList.remove('overflow-hidden');
-        }
-
+        document.body.classList.toggle('overflow-hidden', isModalOpen);
         return () => {
             document.body.classList.remove('overflow-hidden');
         };
@@ -48,42 +46,48 @@ const PersonalInfo = ({ info }: PersonalInfoProps) => {
                 <div className="grid grid-cols-2 gap-4 text-sm">
                     <div>
                         <span className="font-medium text-gray-400">Email:</span>
-                        <div className='font-bold'>quydiem2015@gmail.com</div>
+                        <div className="font-bold truncate">{email}</div>
                     </div>
                     <div>
                         <span className="font-medium text-gray-400">Display name:</span>
-                        <div className='font-bold'>Sun Sun</div>
+                        <div className="font-bold">{name}</div>
                     </div>
                     <div>
                         <span className="font-medium text-gray-400">Gender:</span>
-                        <div className='font-bold'>{info.gender}</div>
+                        <div className="font-bold">{gender.charAt(0).toUpperCase() + gender.slice(1).toLowerCase()}</div>
                     </div>
                     <div>
                         <span className="font-medium text-gray-400">Phone Number:</span>
-                        <div className='font-bold'>0961164107</div>
+                        <div className="font-bold">{phone}</div>
                     </div>
                     <div className="col-span-2">
                         <span className="font-medium text-gray-400">Facebook Link:</span>
-                        <div className='font-bold'>https://facebook.com/yourusername</div>
+                        <div className="font-bold truncate">{facebookUrl ?? <span className="text-gray-400">Not set</span>}</div>
                     </div>
                     <div className="col-span-2">
                         <span className="font-medium text-gray-400">Github Link:</span>
-                        <div className='font-bold'>https://github.com/yourusername</div>
+                        <div className="font-bold truncate">{githubUrl ?? <span className="text-gray-400">Not set</span>}</div>
                     </div>
                 </div>
+
                 <div className="h-px w-full bg-gray-200 opacity-50 my-[1rem]" />
-                <div className='text-sm'>
+
+                <div className="text-sm">
                     <div>
                         <span className="font-medium text-gray-400 mb-[0.5rem] block">Biography:</span>
-                        <div className='font-medium'>John Doe is a fullstack developer with experience in Spring Boot and Next.js. 
-                                He’s passionate about clean code, personal growth, and building meaningful digital products.
-                        </div>
+                        <div className="font-medium">{bio ?? <span className="text-gray-400">Not set</span>}</div>
                     </div>
                 </div>
+
                 <EditPersonalInfoModal
                     isModalOpen={isModalOpen}
                     onClose={() => setIsModalOpen(false)}
-                    info={info}
+                    gender={gender}
+                    name={name}
+                    phone={phone}
+                    email={email}
+                    facebookUrl={facebookUrl}
+                    githubUrl={githubUrl}
                 />
             </CardContent>
         </Card>

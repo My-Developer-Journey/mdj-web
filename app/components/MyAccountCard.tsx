@@ -6,18 +6,20 @@ import { Card, CardContent } from "./card";
 
 type MyAccountCardProps = {
   name: string
-  role: string
-  department: string
-  staffId: string
-  staffAccount: string
-  phone: string
   email: string
-  avatarUrl: string
+  avatarUrl?: string
+  facebookUrl?: string
+  githubUrl?: string
+  createdDate: string
 }
 
 const MyAccountCard = ({
   name,
+  email,
   avatarUrl,
+  facebookUrl,
+  githubUrl,
+  createdDate,
 }: MyAccountCardProps) => {
   return (
     <Card className="w-full px-[2rem] py-[1rem] h-full">
@@ -25,7 +27,7 @@ const MyAccountCard = ({
         {/* Avatar + Name */}
         <div className="flex gap-[2rem] items-center w-2/3">
           <Image
-            src={avatarUrl}
+            src={avatarUrl || '/default-avatar.png'}
             alt="Avatar"
             width={80}
             height={80}
@@ -34,8 +36,8 @@ const MyAccountCard = ({
           <div>
             <h2 className="font-semibold text-2xl mb-[0.35rem]">{name}</h2>
             <p className="text-md">
-              <span className="text-sky-600 font-medium">quydiem2015@gmail.com</span>{" "}
-              <span className="text-gray-500">| Join in: 23/07/2025</span>
+              <span className="text-sky-600 font-medium">{email}</span>{" "}
+              <span className="text-gray-500">| Join in: {new Date(createdDate).toLocaleDateString('en-GB')}</span>
             </p>
           </div>
         </div>
@@ -48,27 +50,35 @@ const MyAccountCard = ({
           {/* Facebook */}
           <div className="flex items-center gap-2">
             <FaFacebook className="w-5 h-5 text-blue-600" />
-            <a
-              href="https://facebook.com/yourusername"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-600 hover:underline"
-            >
-              facebook.com/yourusername
-            </a>
+            {facebookUrl ? (
+              <a
+                href={facebookUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-600 hover:underline"
+              >
+                {facebookUrl.replace(/^https?:\/\/(www\.)?/, '')}
+              </a>
+            ) : (
+              <span className="text-gray-400">Not set</span>
+            )}
           </div>
 
           {/* GitHub */}
           <div className="flex items-center gap-2">
             <FaGithub className="w-5 h-5 text-gray-800" />
-            <a
-              href="https://github.com/yourusername"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-gray-800 hover:underline"
-            >
-              github.com/yourusername
-            </a>
+            {githubUrl ? (
+              <a
+                href={githubUrl}
+                rel="noopener noreferrer"
+                target="_blank"
+                className="text-blue-600 hover:underline"
+              >
+                {githubUrl.replace(/^https?:\/\/(www\.)?/, '')}
+              </a>
+            ) : (
+              <span className="text-gray-400">Not set</span>
+            )}
           </div>
         </div>
       </CardContent>
