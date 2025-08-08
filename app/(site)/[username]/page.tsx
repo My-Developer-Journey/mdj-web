@@ -1,8 +1,8 @@
 'use client'
 
-import MyAccountCard from "@/app/components/MyAccountCard";
-import MyPersonalInfo from "@/app/components/MyPersonalInfo";
-import MyPostStatistic from "@/app/components/MyPostStatistic";
+import MyPostStatistic from "@/app/components/post/MyPostStatistic";
+import MyAccountCard from "@/app/components/user/MyAccountCard";
+import MyPersonalInfo from "@/app/components/user/MyPersonalInfo";
 import { useAuth } from '../../contexts/AuthContext';
 
 const Profile = () => {

@@ -1,7 +1,7 @@
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Footer from "../components/Footer";
-import Header from "../components/Header";
+import Header from "../components/common/Header";
+import FooterWrapper from "../components/wrappers/FooterWrapper";
 import { AuthProvider } from '../contexts/AuthContext';
 import { LoadingProvider } from '../contexts/LoadingContext';
 import "../globals.css";
@@ -17,7 +17,7 @@ export default function RootLayout({
         <AuthProvider>
           <LoadingProvider>
             <Header/>
-            <main className="py-5 px-[5rem] mt-[8rem] flex-1">{children}</main>
+            <main className="py-5 px-[5rem] mt-[7rem] flex-1">{children}</main>
             <ToastContainer
               toastClassName="font-medium min-h-[4rem] rounded-lg shadow-md"
               position="top-right"
@@ -29,7 +29,7 @@ export default function RootLayout({
               draggable
               pauseOnHover
             />
-            <Footer/>
+            <FooterWrapper/>
           </LoadingProvider>
         </AuthProvider>
       </body>

@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Card } from "./card";
+import { Card } from "../common/card";
 
 interface Author {
     avatar?: string;

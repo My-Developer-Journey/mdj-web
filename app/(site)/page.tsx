@@ -1,6 +1,6 @@
-import PostItem from '../components/PostItem';
-import TopAuthor from '../components/TopAuthor';
-import TopPost from '../components/TopPost';
+import PostItem from '../components/post/PostItem';
+import TopPost from '../components/post/TopPost';
+import TopAuthor from '../components/user/TopAuthor';
 
 const samplePosts = [
   {
