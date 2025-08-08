@@ -7,8 +7,9 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
-import { useAuth } from '../contexts/AuthContext';
-import { useLoading } from '../contexts/LoadingContext';
+import { useAuth } from '../../contexts/AuthContext';
+import { useLoading } from '../../contexts/LoadingContext';
+import { Input } from "./input";
 
 export default function Header() {
     const pathname = usePathname();
@@ -16,36 +17,42 @@ export default function Header() {
     const { setLoading } = useLoading();
     const { user, isLoading, setUser } = useAuth();
 
-    const [showDropdown, setShowDropdown] = useState(false)
+    const [showDropdown, setShowDropdown] = useState(false);
+    const [search, setSearch] = useState('');
 
     const hideAuthButtons = pathname === '/login' || pathname === '/sign-up' || pathname === '/email-sent'
 
     const handleLogout = async () => {
-    setLoading(true);
-    try {
-        const res = await api('/authentications/logout', {
-            method: 'POST',
-        });
+        setLoading(true);
+        try {
+            const res = await api('/authentications/logout', {
+                method: 'POST',
+            });
 
-        const data = await res.json();
+            const data = await res.json();
 
-        if (!res.ok) {
-            toast.error(data.message || "Logout failed");
-            return;
+            if (!res.ok) {
+                toast.error(data.message || "Logout failed");
+                return;
+            }
+
+            setUser(null);
+            setTimeout(() => {
+                router.push('/');
+            }, 2000);
+
+        } catch (err) {
+            console.log(err);
+            toast.error("Something went wrong");
+        } finally {
+            setTimeout(() => setLoading(false), 2000);
         }
+    };
 
-        setUser(null);
-        setTimeout(() => {
-            router.push('/');
-        }, 2000);
-
-    } catch (err) {
-        console.log(err);
-        toast.error("Something went wrong");
-    } finally {
-        setTimeout(() => setLoading(false), 2000);
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value;
+        setSearch(value);
     }
-};
 
 
     const handleOutsideClick = () => {
@@ -74,10 +81,12 @@ export default function Header() {
 
                 {/* Search */}
                 <div className="flex-1 flex justify-center px-10">
-                    <input
+                    <Input
                         type="text"
                         placeholder="Search..."
-                        className="w-full max-w-[30rem] bg-white px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
+                        value={search}
+                        onChange={handleChange}
+                        wrapperClassName="max-w-[30rem]"
                     />
                 </div>
 

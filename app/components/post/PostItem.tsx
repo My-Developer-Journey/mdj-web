@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Card, CardContent } from "../components/card";
+import { Card, CardContent } from "../common/card";
 
 interface Post {
     thumbnail?: string;

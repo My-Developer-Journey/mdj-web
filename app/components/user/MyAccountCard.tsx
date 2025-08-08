@@ -3,7 +3,7 @@
 import { UserType } from '@/app/types/account';
 import Image from "next/image";
 import { FaFacebook, FaGithub } from "react-icons/fa";
-import { Card, CardContent } from "./card";
+import { Card, CardContent } from "../common/card";
 
 type MyAccountCardProps = Pick<UserType, 
   'displayName' | 'email' | 'facebookUrl' | 'githubUrl' | 'createdDate' | 'avatar'

@@ -3,7 +3,7 @@
 import { UserType } from '@/app/types/account';
 import { Pencil } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { Card, CardContent } from './card';
+import { Card, CardContent } from '../common/card';
 import EditPersonalInfoModal from './EditPersonalInfoModal';
 
 type MyPersonalInfoProps = Pick<UserType, 
