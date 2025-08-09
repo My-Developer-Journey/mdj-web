@@ -10,4 +10,26 @@ export const updateProfile = (data: Partial<UserType>) => {
   });
 };
 
+export const uploadAvatar = async (file: File, email: string) => {
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("email", email);
+
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/profile/avatar`, {
+    method: "PUT",
+    body: formData,
+    credentials: "include", // giữ cookie session nếu có
+  });
+
+  if (!res.ok) {
+    const errorText = await res.text();
+    console.error("Upload avatar failed:", errorText);
+    throw new Error("Upload failed");
+  }
+
+  const { data } = await res.json(); // backend trả về ApiResponse<UserResponse>
+  return data; // data chính là UserResponse
+};
+
+
 

@@ -2,12 +2,16 @@
 
 import { UserType } from '@/app/types/account';
 import Image from "next/image";
-import { FaFacebook, FaGithub } from "react-icons/fa";
+import { FaCamera, FaFacebook, FaGithub } from "react-icons/fa";
 import { Card, CardContent } from "../common/card";
+import { useRef, useState } from 'react';
+import { uploadAvatar } from '@/app/services/UserServices';
 
 type MyAccountCardProps = Pick<UserType, 
   'displayName' | 'email' | 'facebookUrl' | 'githubUrl' | 'createdDate' | 'avatar'
->;
+> & {
+  onAvatarUpload?: (file: File) => Promise<void>;
+};
 
 const MyAccountCard = ({
   displayName,
@@ -17,18 +21,50 @@ const MyAccountCard = ({
   githubUrl,
   createdDate,
 }: MyAccountCardProps) => {
+  const [preview, setPreview] = useState<string>(avatar || '/default-avatar.png');
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const file = e.target.files?.[0];
+  if (file) {
+    const url = URL.createObjectURL(file);
+    setPreview(url);
+    try {
+      await uploadAvatar(file, email);
+    } catch (err) {
+      console.error(err);
+    }
+  }
+};
   return (
     <Card className="w-full px-[2rem] py-[1rem] h-full">
       <CardContent className="flex gap-6 items-center justify-between">
         {/* Avatar + Name */}
         <div className="flex gap-[2rem] items-center w-2/3">
-          <Image
-            src={avatar || '/default-avatar.png'}
-            alt="Avatar"
-            width={80}
-            height={80}
-            className="rounded-full object-cover"
-          />
+          <div className="relative">
+            {/* Ảnh đại diện */}
+            <Image
+              src={preview}
+              alt="Avatar"
+              width={100}
+              height={100}
+              className="rounded-full object-cover border"
+            />
+            <button
+              type="button"
+              className="absolute bottom-0 right-0 bg-gray-800 p-2 rounded-full hover:bg-gray-700 cursor-pointer hover:border-blue-500 transition-all duration-200"
+              onClick={() => fileInputRef.current?.click()}
+            >
+              <FaCamera className="w-4 h-4 text-white" />
+            </button>
+            <input
+              type="file"
+              accept="image/*"
+              ref={fileInputRef}
+              onChange={handleFileChange}
+              className="hidden"
+            />
+          </div>
           <div>
             <h2 className="font-semibold text-2xl mb-[0.35rem]">{displayName}</h2>
             <p className="text-md">
