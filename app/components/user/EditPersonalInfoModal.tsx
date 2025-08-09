@@ -24,12 +24,13 @@ const EditPersonalInfoModal = ({
     githubUrl,
 }: EditPersonalInfoModalProps) => {
     const modalRef = useRef<HTMLDivElement>(null);
-    const { setUser } = useAuth(); 
+    const { setUser } = useAuth();
+    const [errors, setErrors] = useState<Record<string, string>>({}); 
 
-        const [form, setForm] = useState<Pick<UserType, 'displayName' | 'bio' | 'gender' | 'phoneNumber' | 'email' | 'facebookUrl' | 'githubUrl'>>({
+    const [form, setForm] = useState<Pick<UserType, 'displayName' | 'bio' | 'gender' | 'phoneNumber' | 'email' | 'facebookUrl' | 'githubUrl'>>({
       displayName: displayName ?? "",
       bio: bio ?? "",
-      gender: gender ?? "other",
+      gender: gender ?? "",
       phoneNumber: phoneNumber ?? "",
       email: email ?? "",
       facebookUrl: facebookUrl ?? "",
@@ -40,7 +41,7 @@ const EditPersonalInfoModal = ({
       setForm({
         displayName: displayName ?? "",
         bio: bio ?? "",
-        gender: gender ?? "other",
+        gender: gender !== undefined && gender !== null ? String(gender) : "",
         phoneNumber: phoneNumber ?? "",
         email: email ?? "",
         facebookUrl: facebookUrl ?? "",
@@ -68,7 +69,30 @@ const EditPersonalInfoModal = ({
       setForm({ ...form, [e.target.name]: e.target.value });
     };
 
+    const validateForm = () => {
+      const newErrors: { email?: string; phoneNumber?: string; gender?: string } = {};
+
+      // Kiểm tra email (regex chuẩn)
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
+        newErrors.email = "Please enter a valid email address.";
+      }
+
+      // Kiểm tra số điện thoại (ví dụ: chỉ chấp nhận 9-11 chữ số)
+      if (!/^\d{9,11}$/.test(form.phoneNumber)) {
+        newErrors.phoneNumber = "Please enter a valid phone number (9-11 digits).";
+      }
+      // Kiểm tra giới tính
+      if (form.gender === "" || form.gender === null || form.gender === undefined) {
+        newErrors.gender = "Please select your gender.";
+      }
+
+      setErrors(newErrors);
+      return Object.keys(newErrors).length === 0; // true nếu không có lỗi
+    };
+
+
     const handleSubmit = async () => {
+      if (!validateForm()) return;
       const res = await updateProfile(form);
       if (res.ok) {
         const updatedUser = await res.json();
@@ -114,8 +138,11 @@ const EditPersonalInfoModal = ({
               value={form.email}
               onChange={handleChange}
               placeholder="Enter your email"
-              className="border border-gray-500 px-3 py-2 rounded-md outline-none focus:ring-2 focus:ring-blue-400 placeholder:text-gray-400 w-72"
+              className={`border px-3 py-2 rounded-md outline-none focus:ring-2 w-72 ${
+                errors.email ? "border-red-500 focus:ring-red-400" : "border-gray-500 focus:ring-blue-400"
+              }`}
             />
+            {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
           </div>
           <div>
             <label className="block mb-1 font-medium">Phone Number</label>
@@ -125,8 +152,11 @@ const EditPersonalInfoModal = ({
               value={form.phoneNumber}
               onChange={handleChange}
               placeholder="Enter your phone number"
-              className="border border-gray-500 px-3 py-2 rounded-md outline-none focus:ring-2 focus:ring-blue-400 placeholder:text-gray-400 w-72"
+              className={`border px-3 py-2 rounded-md outline-none focus:ring-2 w-72 ${
+                errors.phoneNumber ? "border-red-500 focus:ring-red-400" : "border-gray-500 focus:ring-blue-400"
+              }`}
             />
+            {errors.phoneNumber && <p className="text-red-500 text-sm mt-1">{errors.phoneNumber}</p>}
           </div>
           <div>
             <label className="block mb-1 font-medium">Gender</label>
@@ -134,11 +164,16 @@ const EditPersonalInfoModal = ({
               name="gender"
               value={form.gender}
               onChange={handleChange}
-              className="border border-gray-500 px-3 py-2 rounded-md outline-none focus:ring-2 focus:ring-blue-400 w-72">
-              <option value="other">Other</option>
-              <option value="male">Male</option>
-              <option value="female">Female</option>
+              className={`border px-3 py-2 rounded-md outline-none focus:ring-2 w-72 ${
+                errors.gender ? "border-red-500 focus:ring-red-400" : "border-gray-500 focus:ring-blue-400"
+              }`}
+            >
+              <option value="">Select gender</option>
+              <option value="0">Male</option>
+              <option value="1">Female</option>
+              <option value="2">Other</option>
             </select>
+            {errors.gender && <p className="text-red-500 text-sm mt-1">{errors.gender}</p>}
           </div>
           <div className="col-span-2">
             <label className="block mb-1 font-medium">Facebook Link</label>
@@ -178,13 +213,16 @@ const EditPersonalInfoModal = ({
         <div className="pt-6 mt-6 border-t border-gray-200 flex justify-between">
           <button
             onClick={onClose}
-            className="bg-gray-400 text-white px-4 py-2 rounded-md hover:bg-gray-500 transition"
+            className="bg-gray-400 text-white px-4 py-2 rounded-md hover:bg-gray-500 cursor-pointer transition-all duration-200"
           >
             Close
           </button>
           <button
-            onClick={handleSubmit}
-            className="bg-black text-white px-4 py-2 rounded-md hover:bg-gray-800 transition"
+            onClick={async () => {
+              await handleSubmit();
+              window.location.reload();
+            }}
+            className="bg-black text-white px-4 py-2 rounded-md hover:bg-gray-800 cursor-pointer transition-all duration-200"
           >
             Apply
           </button>
