@@ -1,5 +1,9 @@
+'use client';
+
 import { UserType } from '@/app/types/account';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { useAuth } from '../contexts/AuthContext';
+import { updateProfile } from '../services/UserServices';
 
 type EditPersonalInfoModalProps = Pick<UserType, 
   'displayName' | 'bio' | 'gender' | 'phoneNumber' | 'email' | 'facebookUrl' | 'githubUrl'
@@ -11,30 +15,70 @@ type EditPersonalInfoModalProps = Pick<UserType,
 const EditPersonalInfoModal = ({
     isModalOpen,
     onClose,
-    // gender,
-    // bio,
+    gender,
+    bio,
     displayName,
-    // phoneNumber,
-    // email,
-    // facebookUrl,
-    // githubUrl,
+    phoneNumber,
+    email,
+    facebookUrl,
+    githubUrl,
 }: EditPersonalInfoModalProps) => {
     const modalRef = useRef<HTMLDivElement>(null);
+    const { setUser } = useAuth(); 
+
+        const [form, setForm] = useState<Pick<UserType, 'displayName' | 'bio' | 'gender' | 'phoneNumber' | 'email' | 'facebookUrl' | 'githubUrl'>>({
+      displayName: displayName ?? "",
+      bio: bio ?? "",
+      gender: gender ?? "other",
+      phoneNumber: phoneNumber ?? "",
+      email: email ?? "",
+      facebookUrl: facebookUrl ?? "",
+      githubUrl: githubUrl ?? ""
+    });
+
     useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+      setForm({
+        displayName: displayName ?? "",
+        bio: bio ?? "",
+        gender: gender ?? "other",
+        phoneNumber: phoneNumber ?? "",
+        email: email ?? "",
+        facebookUrl: facebookUrl ?? "",
+        githubUrl: githubUrl ?? ""
+      });
+    }, [displayName, bio, gender, phoneNumber, email, facebookUrl, githubUrl]);
+
+    useEffect(() => {
+      const handleClickOutside = (event: MouseEvent) => {
+        if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+          onClose();
+        }
+      };
+
+      if (isModalOpen) {
+        document.addEventListener('mousedown', handleClickOutside);
+      }
+
+      return () => {
+        document.removeEventListener('mousedown', handleClickOutside);
+      };
+    }, [isModalOpen, onClose]);
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+      setForm({ ...form, [e.target.name]: e.target.value });
+    };
+
+    const handleSubmit = async () => {
+      const res = await updateProfile(form);
+      if (res.ok) {
+        const updatedUser = await res.json();
+        setUser(updatedUser.data);
         onClose();
+      } else {
+        console.error('Update profile failed');
       }
     };
 
-    if (isModalOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [isModalOpen, onClose]);
     if (!isModalOpen) return null;
 
     return (
@@ -51,49 +95,82 @@ const EditPersonalInfoModal = ({
 
         {/* Scrollable Content */}
         <form className="grid grid-cols-2 gap-4 text-sm text-gray-800">
-          <input
-  type="text"
-  defaultValue={displayName || ""}
-  placeholder="Enter your last name"
-  className="border border-gray-500 px-3 py-2 rounded-md outline-none focus:ring-2 focus:ring-blue-400 placeholder:text-gray-400"
-/>
           <div>
-            <label className="block mb-1 font-medium">Last Name</label>
-            <input type="text" defaultValue="Bozorgi" className="border border-gray-500 px-3 py-2 rounded-md outline-none focus:ring-2 focus:ring-blue-400"/>
+            <label className="block mb-1 font-medium">Display Name</label>
+            <input
+              type="text"
+              name="displayName"
+              value={form.displayName}
+              onChange={handleChange}
+              placeholder="Enter your display name"
+              className="border border-gray-500 px-3 py-2 rounded-md outline-none focus:ring-2 focus:ring-blue-400 placeholder:text-gray-400 w-72"
+            />
           </div>
-          <div className="col-span-2 relative">
+          <div>
             <label className="block mb-1 font-medium">Email</label>
             <input
               type="email"
-              defaultValue="mehrabbozorgi.business@gmail.com"
-              className="input-field pr-10"
+              name="email"
+              value={form.email}
+              onChange={handleChange}
+              placeholder="Enter your email"
+              className="border border-gray-500 px-3 py-2 rounded-md outline-none focus:ring-2 focus:ring-blue-400 placeholder:text-gray-400 w-72"
             />
-            <span className="absolute right-3 top-9 text-green-600 font-bold text-xl">✔</span>
-          </div>
-          <div className="col-span-2">
-            <label className="block mb-1 font-medium">Address</label>
-            <input type="text" defaultValue="33062 Zboncak isle" className="input-field" />
-          </div>
-          <div className="col-span-2">
-            <label className="block mb-1 font-medium">Contact Number</label>
-            <input type="text" defaultValue="58077.79" className="input-field" />
           </div>
           <div>
-            <label className="block mb-1 font-medium">City</label>
-            <select className="input-field">
-              <option>Mehrab</option>
-            </select>
+            <label className="block mb-1 font-medium">Phone Number</label>
+            <input
+              type="tel"
+              name="phoneNumber"
+              value={form.phoneNumber}
+              onChange={handleChange}
+              placeholder="Enter your phone number"
+              className="border border-gray-500 px-3 py-2 rounded-md outline-none focus:ring-2 focus:ring-blue-400 placeholder:text-gray-400 w-72"
+            />
           </div>
           <div>
-            <label className="block mb-1 font-medium">State</label>
-            <select className="input-field">
-              <option>Bozorgi</option>
+            <label className="block mb-1 font-medium">Gender</label>
+            <select
+              name="gender"
+              value={form.gender}
+              onChange={handleChange}
+              className="border border-gray-500 px-3 py-2 rounded-md outline-none focus:ring-2 focus:ring-blue-400 w-72">
+              <option value="other">Other</option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
             </select>
           </div>
-          <div className="col-span-2 relative">
-            <label className="block mb-1 font-medium">Password</label>
-            <input type="password" defaultValue="sdbfbnd65sfdvb s" className="input-field pr-10" />
-            <span className="absolute right-3 top-9 text-green-600 font-bold text-xl">✔</span>
+          <div className="col-span-2">
+            <label className="block mb-1 font-medium">Facebook Link</label>
+            <input
+              type="url"
+              name="facebookUrl"
+              value={form.facebookUrl}
+              onChange={handleChange}
+              placeholder="Enter your facebook link"
+              className="border border-gray-500 px-3 py-2 rounded-md outline-none focus:ring-2 focus:ring-blue-400 placeholder:text-gray-400 w-160"
+            />
+          </div>
+          <div className="col-span-2">
+            <label className="block mb-1 font-medium">Github Link</label>
+            <input
+              type="url"
+              name="githubUrl"
+              value={form.githubUrl}
+              onChange={handleChange}
+              placeholder="Enter your github link"
+              className="border border-gray-500 px-3 py-2 rounded-md outline-none focus:ring-2 focus:ring-blue-400 placeholder:text-gray-400 w-160"
+            />
+          </div>
+          <div className="col-span-2">
+            <label className="block mb-1 font-medium">Bio</label>
+            <textarea
+              name="bio"
+              value={form.bio}
+              onChange={handleChange}
+              rows={4}
+              className="border border-gray-500 px-3 py-2 rounded-md outline-none focus:ring-2 focus:ring-blue-400 w-160 resize-none"
+            />
           </div>
         </form>
 
@@ -106,8 +183,8 @@ const EditPersonalInfoModal = ({
             Close
           </button>
           <button
-            disabled
-            className="bg-black text-white px-4 py-2 rounded-md opacity-50 cursor-not-allowed"
+            onClick={handleSubmit}
+            className="bg-black text-white px-4 py-2 rounded-md hover:bg-gray-800 transition"
           >
             Apply
           </button>
@@ -116,5 +193,4 @@ const EditPersonalInfoModal = ({
     </div>
   );
 };
-
 export default EditPersonalInfoModal;
