@@ -2,8 +2,8 @@
 
 import { UserType } from '@/app/types/account';
 import { useEffect, useRef, useState } from 'react';
-import { useAuth } from '../contexts/AuthContext';
-import { updateProfile } from '../services/UserServices';
+import { useAuth } from '@/app/contexts/AuthContext';
+import { updateProfile } from '@/app/services/UserServices';
 
 type EditPersonalInfoModalProps = Pick<UserType, 
   'displayName' | 'bio' | 'gender' | 'phoneNumber' | 'email' | 'facebookUrl' | 'githubUrl'
