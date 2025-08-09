@@ -1,4 +1,4 @@
-import { Card, CardContent } from "./card"
+import { Card, CardContent } from "../common/card"
 
 const MyPostStatistic = () => {
   return (
