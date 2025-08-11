@@ -1,17 +1,17 @@
 'use client';
 
-import { UserType } from '@/app/types/account';
+import { User } from '@/app/interfaces/user';
 import { AuthContextType } from '@/app/types/authentication';
-import { api } from '@/util/api';
+import { api } from '@/utilities/api';
 import { createContext, useContext, useEffect, useState } from 'react';
 
 const AuthContext = createContext<AuthContextType>({ user: null, isLoading: true, setUser: () => {} });
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-    const [user, _setUser] = useState<UserType | null>(null);
+    const [user, _setUser] = useState<User | null>(null);
     const [isLoading, setIsLoading] = useState(true);
 
-    const setUser = (newUser: UserType | null) => {
+    const setUser = (newUser: User | null) => {
         _setUser(newUser);
     };
 

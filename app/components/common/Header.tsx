@@ -1,6 +1,6 @@
 'use client'
 
-import { api } from "@/util/api";
+import { api } from "@/utilities/api";
 import { Bell, PencilLine } from "lucide-react";
 import Image from "next/image";
 import Link from 'next/link';
@@ -9,7 +9,7 @@ import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { useAuth } from '../../contexts/AuthContext';
 import { useLoading } from '../../contexts/LoadingContext';
-import { Input } from "./input";
+import { Input } from "./InputBox";
 
 export default function Header() {
     const pathname = usePathname();
@@ -73,7 +73,7 @@ export default function Header() {
 
     return (
         <header className="fixed top-0 left-0 w-full z-50">
-            <div className="min-w-[80rem] max-w-[100rem] mx-auto py-[1.5rem] px-[5rem] flex items-center justify-between bg-gray-100 shadow-md">
+            <div className="min-w-[var(--min-width)] max-w-[var(--max-width)] mx-auto py-[1.5rem] px-[5rem] flex items-center justify-between bg-gray-100 shadow-md">
                 {/* Logo */}
                 <Link href="/">
                     <Image height="40" width="120" src="/logo.png" alt="Logo" className="h-10 w-auto cursor-pointer" />

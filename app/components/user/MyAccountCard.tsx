@@ -1,13 +1,13 @@
 'use client'
 
-import { UserType } from '@/app/types/account';
+import { User } from '@/app/interfaces/user';
+import { uploadAvatar } from '@/app/services/userService';
 import Image from "next/image";
-import { FaCamera, FaFacebook, FaGithub } from "react-icons/fa";
-import { Card, CardContent } from "../common/card";
 import { useRef, useState } from 'react';
-import { uploadAvatar } from '@/app/services/UserServices';
+import { FaCamera, FaFacebook, FaGithub } from "react-icons/fa";
+import { Card, CardContent } from "../common/ProjectCard";
 
-type MyAccountCardProps = Pick<UserType, 
+type MyAccountCardProps = Pick<User,
   'displayName' | 'email' | 'facebookUrl' | 'githubUrl' | 'createdDate' | 'avatar'
 > & {
   onAvatarUpload?: (file: File) => Promise<void>;

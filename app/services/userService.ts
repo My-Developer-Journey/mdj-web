@@ -1,7 +1,7 @@
 'use client';
 
-import { api } from "@/util/api";
-import { UserType } from "@/app/types/account";
+import { UserType } from "@/app/interfaces/user";
+import { api } from "@/utilities/api";
 
 export const updateProfile = (data: Partial<UserType>) => {
   return api("/users/profile", {
@@ -18,7 +18,7 @@ export const uploadAvatar = async (file: File, email: string) => {
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/profile/avatar`, {
     method: "PUT",
     body: formData,
-    credentials: "include", // giữ cookie session nếu có
+    credentials: "include",
   });
 
   if (!res.ok) {
@@ -27,8 +27,8 @@ export const uploadAvatar = async (file: File, email: string) => {
     throw new Error("Upload failed");
   }
 
-  const { data } = await res.json(); // backend trả về ApiResponse<UserResponse>
-  return data; // data chính là UserResponse
+  const { data } = await res.json();
+  return data;
 };
 
 

@@ -3,6 +3,8 @@
 :root {
   --primary-white: #ffffff;
   --primary-black: #171717;
+  --max-width: 120rem;
+  --min-width: 80rem;
 }
 
 @theme inline {

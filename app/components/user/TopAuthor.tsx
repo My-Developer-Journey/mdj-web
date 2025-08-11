@@ -1,12 +1,6 @@
+import { Author } from "@/app/interfaces/user";
 import Image from "next/image";
-import { Card } from "../common/card";
-
-interface Author {
-    avatar?: string;
-    name?: string;
-    posts?: number;
-    likes?: number;
-}
+import { Card } from "../common/ProjectCard";
 
 const TopAuthor = ({ author }: { author: Author }) => {
     return (

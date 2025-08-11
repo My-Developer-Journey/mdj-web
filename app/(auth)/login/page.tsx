@@ -1,6 +1,6 @@
 'use client'
 
-import { api } from "@/util/api";
+import { api } from "@/utilities/api";
 import { Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from 'next/navigation';
