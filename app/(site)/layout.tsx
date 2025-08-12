@@ -13,7 +13,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="flex flex-col min-h-screen min-w-[80rem] max-w-[100rem] mx-auto">
+      <body className="flex flex-col min-h-screen min-w-[var(--min-width)] max-w-[var(--max-width)] mx-auto">
         <AuthProvider>
           <LoadingProvider>
             <Header/>

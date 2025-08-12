@@ -1,13 +1,13 @@
 'use client'
 
-import { UserType } from '@/app/types/account';
+import { User } from '@/app/interfaces/user';
 import { Pencil } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { Card, CardContent } from '../common/card';
+import { Card, CardContent } from '../common/ProjectCard';
 import EditPersonalInfoModal from './EditPersonalInfoModal';
 
-type MyPersonalInfoProps = Pick<UserType, 
-  'displayName' | 'bio' | 'gender' | 'phoneNumber' | 'email' | 'facebookUrl' | 'githubUrl'
+type MyPersonalInfoProps = Pick<User,
+    'displayName' | 'bio' | 'gender' | 'phoneNumber' | 'email' | 'facebookUrl' | 'githubUrl'
 >;
 
 const PersonalInfo = ({

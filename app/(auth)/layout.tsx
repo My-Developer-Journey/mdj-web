@@ -12,7 +12,7 @@ export default function LoginLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="flex flex-col min-h-screen min-w-[80rem] max-w-[100rem] mx-auto">
+      <body className="flex flex-col min-h-screen min-w-[var(--min-width)] max-w-[var(--max-width)] mx-auto">
         <LoadingProvider>
           <GoogleOAuthProvider clientId="1234567890-fakeid.apps.googleusercontent.com">
             <Header />

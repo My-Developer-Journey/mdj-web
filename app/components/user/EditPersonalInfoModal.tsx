@@ -1,11 +1,11 @@
 'use client';
 
-import { UserType } from '@/app/types/account';
-import { useEffect, useRef, useState } from 'react';
 import { useAuth } from '@/app/contexts/AuthContext';
-import { updateProfile } from '@/app/services/UserServices';
+import { User } from '@/app/interfaces/user';
+import { updateProfile } from '@/app/services/userService';
+import { useEffect, useRef, useState } from 'react';
 
-type EditPersonalInfoModalProps = Pick<UserType, 
+type EditPersonalInfoModalProps = Pick<User,
   'displayName' | 'bio' | 'gender' | 'phoneNumber' | 'email' | 'facebookUrl' | 'githubUrl'
 > & {
     isModalOpen: boolean;
@@ -27,7 +27,7 @@ const EditPersonalInfoModal = ({
     const { setUser } = useAuth();
     const [errors, setErrors] = useState<Record<string, string>>({}); 
 
-    const [form, setForm] = useState<Pick<UserType, 'displayName' | 'bio' | 'gender' | 'phoneNumber' | 'email' | 'facebookUrl' | 'githubUrl'>>({
+    const [form, setForm] = useState<Pick<User, 'displayName' | 'bio' | 'gender' | 'phoneNumber' | 'email' | 'facebookUrl' | 'githubUrl'>>({
       displayName: displayName ?? "",
       bio: bio ?? "",
       gender: gender ?? "",
