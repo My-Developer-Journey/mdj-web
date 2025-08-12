@@ -1,9 +1,9 @@
 'use client';
 
-import { UserType } from "@/app/interfaces/user";
+import { User } from "@/app/interfaces/user";
 import { api } from "@/utilities/api";
 
-export const updateProfile = (data: Partial<UserType>) => {
+export const updateProfile = (data: Partial<User>) => {
   return api("/users/profile", {
     method: "PUT",
     body: JSON.stringify(data),

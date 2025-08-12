@@ -4,7 +4,7 @@ import { Props } from '@/app/types/projectEditor'
 import Image from '@tiptap/extension-image'
 import Link from '@tiptap/extension-link'
 import Placeholder from '@tiptap/extension-placeholder'
-import { EditorContent, useEditor } from '@tiptap/react'
+import { Editor, EditorContent, useEditor } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import {
     Bold,
@@ -41,7 +41,7 @@ export default function ProjectEditor({ initialHtml = '', onChange }: Props) {
     )
 }
 
-function Toolbar({ editor }: { editor: any }) {
+function Toolbar({ editor }: { editor: Editor | null }) {
     const buttonStyle =
         "p-2 rounded hover:bg-gray-100 active:bg-gray-200 transition-colors disabled:opacity-50 flex items-center justify-center"
 
@@ -50,6 +50,7 @@ function Toolbar({ editor }: { editor: any }) {
         if (file) {
             const reader = new FileReader()
             reader.onload = () => {
+                if (!editor) return;
                 editor.chain().focus().setImage({ src: reader.result as string }).run()
             }
             reader.readAsDataURL(file)
@@ -61,21 +62,30 @@ function Toolbar({ editor }: { editor: any }) {
             <button
                 type="button"
                 className={buttonStyle}
-                onClick={() => editor.chain().focus().toggleBold().run()}
+                onClick={() => {
+                    if (!editor) return;
+                    editor.chain().focus().toggleBold().run();
+                }}
             >
                 <Bold className="w-5 h-5" />
             </button>
             <button
                 type="button"
                 className={buttonStyle}
-                onClick={() => editor.chain().focus().toggleItalic().run()}
+                onClick={() => {
+                    if (!editor) return;
+                    editor.chain().focus().toggleItalic().run();
+                }}
             >
                 <Italic className="w-5 h-5" />
             </button>
             <button
                 type="button"
                 className={buttonStyle}
-                onClick={() => editor.chain().focus().toggleBulletList().run()}
+                onClick={() => {
+                    if (!editor) return;
+                    editor.chain().focus().toggleBulletList().run();
+                }}
             >
                 <List className="w-5 h-5" />
             </button>
@@ -85,6 +95,7 @@ function Toolbar({ editor }: { editor: any }) {
                 onClick={() => {
                     const url = prompt('Enter a link:')
                     if (url) {
+                        if (!editor) return;
                         editor.chain().focus().setLink({ href: url }).run()
                     }
                 }}

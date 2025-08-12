@@ -29,12 +29,15 @@ const CreatePost = () => {
     const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
     const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
     const [contentHtml, setContentHtml] = useState('');
-    const [contentJson, setContentJson] = useState<any>(null);
+    const [contentJson, setContentJson] = useState<unknown>(null);
 
     const handleChangeTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
         setTitle(value);
     }
+
+    console.log(contentHtml);
+    console.log(contentJson);
 
     return (
         <div>

@@ -1,9 +1,30 @@
 'use client';
 
-import { SelectBoxProps } from '@/app/interfaces/selectBox';
-import { useEffect, useRef, useState } from 'react';
+import { ReactNode, useEffect, useRef, useState } from 'react';
 
-export function SelectBox<T extends Record<string, any>>({
+export interface SelectBoxProps<
+    T,
+    K extends keyof T = keyof T,
+    V extends keyof T = keyof T
+> {
+    label?: string;
+    error?: string;
+    items: T[];
+    selectedItems: T[];
+    setSelectedItems: (items: T[]) => void;
+    wrapperClassName?: string;
+    className?: string;
+    placeholder?: string;
+    maxSelected?: number;
+    labelKey: K;
+    valueKey: V;
+}
+
+export function SelectBox<
+    T,
+    K extends keyof T,
+    V extends keyof T
+>({
     label,
     error,
     items,
@@ -15,7 +36,7 @@ export function SelectBox<T extends Record<string, any>>({
     maxSelected,
     labelKey,
     valueKey,
-}: SelectBoxProps<T>) {
+}: SelectBoxProps<T, K, V>) {
     const [query, setQuery] = useState('');
     const [filtered, setFiltered] = useState<T[]>([]);
     const [showSuggestions, setShowSuggestions] = useState(false);
@@ -27,7 +48,9 @@ export function SelectBox<T extends Record<string, any>>({
         if (query.trim()) {
         const f = items.filter(
             (item) =>
-            String(item[labelKey]).toLowerCase().includes(query.toLowerCase()) &&
+            String(item[labelKey] ?? '')
+                .toLowerCase()
+                .includes(query.toLowerCase()) &&
             !selectedItems.some((t) => t[valueKey] === item[valueKey])
         );
         setFiltered(f);
@@ -41,7 +64,10 @@ export function SelectBox<T extends Record<string, any>>({
     // Click outside
     useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
-        if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+        if (
+            containerRef.current &&
+            !containerRef.current.contains(event.target as Node)
+        ) {
             setShowSuggestions(false);
         }
         }
@@ -50,24 +76,27 @@ export function SelectBox<T extends Record<string, any>>({
     }, []);
 
     const handleSelect = (item: T) => {
-        if (maxSelected && selectedItems.length >= maxSelected){
-            setInternalError(`You can only select up to ${maxSelected} items`);
-            setShowSuggestions(false);
-            return;
-        }else{
-            setInternalError(null);
+        if (maxSelected && selectedItems.length >= maxSelected) {
+        setInternalError(`You can only select up to ${maxSelected} items`);
+        setShowSuggestions(false);
+        return;
+        } else {
+        setInternalError(null);
         }
         setSelectedItems([...selectedItems, item]);
         setQuery('');
         setShowSuggestions(false);
     };
 
-    const handleRemove = (id: any) => {
+    const handleRemove = (id: T[V]) => {
         setSelectedItems(selectedItems.filter((item) => item[valueKey] !== id));
     };
 
     return (
-        <div ref={containerRef} className={`flex flex-col gap-1 w-full ${wrapperClassName}`}>
+        <div
+        ref={containerRef}
+        className={`flex flex-col gap-1 w-full ${wrapperClassName}`}
+        >
         {label && <label className="font-medium text-sm">{label}</label>}
 
         {/* Selected items */}
@@ -78,7 +107,7 @@ export function SelectBox<T extends Record<string, any>>({
                 key={String(item[valueKey])}
                 className="flex items-center gap-1 bg-gray-200 px-3 py-1 rounded-md text-sm"
                 >
-                {item[labelKey]}
+                {item[labelKey] as ReactNode}
                 <button
                     type="button"
                     onClick={() => handleRemove(item[valueKey])}
@@ -100,8 +129,12 @@ export function SelectBox<T extends Record<string, any>>({
             onFocus={() => query && setShowSuggestions(true)}
             placeholder={placeholder}
             className={`bg-white px-4 py-2 border rounded-sm focus:outline-none focus:ring-1 
-            ${error ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-black'}
-            ${className}`}
+                ${
+                error
+                    ? 'border-red-500 focus:ring-red-500'
+                    : 'border-gray-300 focus:ring-black'
+                }
+                ${className}`}
             />
 
             {/* Suggestions */}
@@ -113,7 +146,7 @@ export function SelectBox<T extends Record<string, any>>({
                     onClick={() => handleSelect(item)}
                     className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
                 >
-                    {item[labelKey]}
+                    {item[labelKey] as ReactNode}
                 </li>
                 ))}
             </ul>
@@ -121,7 +154,9 @@ export function SelectBox<T extends Record<string, any>>({
         </div>
 
         {error && <span className="text-sm text-red-500">{error}</span>}
-        {internalError && <span className="text-sm text-red-500 font-bold">{internalError}</span>}
+        {internalError && (
+            <span className="text-sm text-red-500 font-bold">{internalError}</span>
+        )}
         </div>
     );
 }

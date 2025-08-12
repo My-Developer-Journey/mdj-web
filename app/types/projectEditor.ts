@@ -1,4 +1,6 @@
+import { JSONContent } from "@tiptap/core"
+
 export type Props = {
     initialHtml?: string
-    onChange?: (html: string, json: any) => void
+    onChange?: (html: string, json: JSONContent) => void
 }
