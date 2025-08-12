@@ -1,6 +1,6 @@
 'use client'
 
-import { api } from "@/utilities/api";
+import { signOut } from "@/app/services/authenticationService";
 import { Bell, PencilLine } from "lucide-react";
 import Image from "next/image";
 import Link from 'next/link';
@@ -25,9 +25,7 @@ export default function Header() {
     const handleLogout = async () => {
         setLoading(true);
         try {
-            const res = await api('/authentications/logout', {
-                method: 'POST',
-            });
+            const res = await signOut();
 
             const data = await res.json();
 

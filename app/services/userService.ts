@@ -31,5 +31,10 @@ export const uploadAvatar = async (file: File, email: string) => {
   return data;
 };
 
+export const userProfile = () => {
+  return api("/users/profile", {
+    method: "GET",
+  });
+};
 
 

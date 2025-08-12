@@ -2,8 +2,8 @@
 
 import { User } from '@/app/interfaces/user';
 import { AuthContextType } from '@/app/types/authentication';
-import { api } from '@/utilities/api';
 import { createContext, useContext, useEffect, useState } from 'react';
+import { userProfile } from '../services/userService';
 
 const AuthContext = createContext<AuthContextType>({ user: null, isLoading: true, setUser: () => {} });
 
@@ -18,7 +18,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     useEffect(() => {
         const fetchMe = async () => {
             try {
-                const res = await api("/users/profile");
+                const res = await userProfile();
 
                 if (res.ok) {
                     const userData = await res.json();
