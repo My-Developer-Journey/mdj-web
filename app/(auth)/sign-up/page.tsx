@@ -1,6 +1,6 @@
 "use client";
 
-import { api } from "@/utilities/api";
+import { signUp } from "@/app/services/authenticationService";
 import { Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from 'next/navigation';
@@ -36,17 +36,14 @@ const SignUp = () => {
     }
 
     try {
-        const res = await api("/authentications/sign-up", {
-            method: "POST",
-            body: JSON.stringify({
-                email,
-                displayName,
-                gender,
-                password,
-                phoneNumber,
-                confirmedPassword,
-                role: 1,
-            }),
+        const res = await signUp({
+          email,
+          displayName,
+          gender,
+          password,
+          phoneNumber,
+          confirmedPassword,
+          role: 1
         });
 
         const result = await res.json();

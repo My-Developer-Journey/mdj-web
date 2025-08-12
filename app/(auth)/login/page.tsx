@@ -1,6 +1,7 @@
 'use client'
 
-import { api } from "@/utilities/api";
+import { signIn } from "@/app/services/authenticationService";
+import { userProfile } from "@/app/services/userService";
 import { Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from 'next/navigation';
@@ -24,10 +25,7 @@ const Login = () => {
     setLoading(true);
 
     try {
-        const res = await api("/authentications/sign-in", {
-            method: "POST",
-            body: JSON.stringify({ email, password }),
-        });
+        const res = await signIn({ email, password });
 
         if (!res.ok) {
             const error = await res.json();
@@ -44,7 +42,7 @@ const Login = () => {
             return;
         }
 
-        const userRes = await api("/users/profile");
+        const userRes = await userProfile();
 
         if (userRes.ok) {
             const userData = await userRes.json();

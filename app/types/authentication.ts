@@ -5,3 +5,13 @@ export type AuthContextType = {
     isLoading: boolean;
     setUser: (user: User | null) => void;
 };
+
+export type SignUp = {
+    email: string;
+    displayName: string;
+    gender: string;
+    password: string;
+    phoneNumber: string;
+    confirmedPassword: string;
+    role: number;
+};
