@@ -20,10 +20,18 @@ export default function ProjectEditor({ initialHtml = '', onChange }: Props) {
             StarterKit,
             Image,
             Link.configure({ openOnClick: true }),
-            Placeholder.configure({ placeholder: 'Write your post...' }),
+            Placeholder.configure({
+                placeholder: 'Start writing your post here... Use the toolbar above to format and customize your content.',
+                emptyEditorClass: 'is-editor-empty',
+            })
         ],
-        content: initialHtml,
+        content: initialHtml?.trim() ? initialHtml : '',
         immediatelyRender: false,
+        editorProps: {
+            attributes: {
+                class: 'prose prose-sm sm:prose lg:prose-lg focus:outline-none min-h-[300px] py-[1rem] px-[1rem]',
+            },
+        },
         onUpdate: ({ editor }) => {
             onChange?.(editor.getHTML(), editor.getJSON())
         },
@@ -34,7 +42,7 @@ export default function ProjectEditor({ initialHtml = '', onChange }: Props) {
     return (
         <div className="w-full mx-auto bg-white border rounded-md focus:outline-none focus:ring-1 border-gray-300 focus:ring-black">
             <Toolbar editor={editor} />
-            <div className="p-6 min-h-[400px] prose max-w-none focus:outline-none">
+            <div className="min-h-[70vh] max-w-none focus:outline-none">
                 <EditorContent editor={editor} />
             </div>
         </div>
