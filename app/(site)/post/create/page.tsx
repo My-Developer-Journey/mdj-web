@@ -54,6 +54,7 @@ const CreatePost = () => {
     minDate.setDate(minDate.getDate() + 3);
     const minDateStr = minDate.toISOString().split("T")[0];
 
+    console.log(file);
     console.log(contentHtml);
     console.log(contentJson);
 
