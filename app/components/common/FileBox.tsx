@@ -2,10 +2,10 @@
 
 import { InputProps } from "@/app/types/input";
 import { Trash2, Upload } from "lucide-react";
+import NextImage from "next/image";
 import React, { useRef, useState } from "react";
 
 export const FileInput: React.FC<InputProps> = ({
-    label,
     error,
     wrapperClassName = '',
     className = '',
@@ -70,9 +70,11 @@ export const FileInput: React.FC<InputProps> = ({
             >
                 {preview ? (
                     <div className="relative w-full h-[12rem] bg-[var(--primary-black)] flex items-center justify-center rounded-md">
-                        <img
+                        <NextImage
                             src={preview}
                             alt="Preview"
+                            width={500}
+                            height={500}
                             className="max-h-full max-w-full object-contain"
                         />
                         <button
