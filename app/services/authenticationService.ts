@@ -1,7 +1,7 @@
 'use client';
 
 import { api } from "@/utilities/api";
-import { SignUp } from "../types/authentication";
+import { SignUp } from "../interfaces/authentication";
 
 export const signIn = (data: { email: string; password: string }) => {
     return api("/authentications/sign-in", {
