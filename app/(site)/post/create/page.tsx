@@ -79,6 +79,8 @@ const CreatePost = () => {
     const minDateStr = minDate.toISOString().split("T")[0];
 
     console.log(editorHtml);
+    console.log(file);
+    console.log(editorJson);
 
     return (
         <div className="w-full flex justify-center">
