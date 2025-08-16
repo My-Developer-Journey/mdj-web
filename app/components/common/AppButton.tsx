@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import React from "react";
 
-type ButtonVariant = "black" | "gray";
+type ButtonVariant = "black" | "gray" | "red";
 
 interface AppButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     variant?: ButtonVariant;
@@ -21,6 +21,7 @@ export default function AppButton({
     const variantStyle = {
         black: "bg-[var(--primary-black)] text-[var(--primary-white)] hover:bg-gray-800",
         gray: "bg-gray-400 text-white hover:bg-gray-500",
+        red: "bg-red-600 text-white hover:bg-red-700",
     };
 
     return (

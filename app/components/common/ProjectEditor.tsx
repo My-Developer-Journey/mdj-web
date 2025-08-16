@@ -11,7 +11,8 @@ import {
     Image as ImageIcon,
     Italic,
     Link as LinkIcon,
-    List
+    List,
+    Trash2
 } from 'lucide-react'
 
 export default function ProjectEditor({ initialHtml = '', onChange }: Props) {
@@ -36,8 +37,6 @@ export default function ProjectEditor({ initialHtml = '', onChange }: Props) {
             onChange?.(editor.getHTML(), editor.getJSON())
         },
     })
-
-    if (!editor) return null
 
     return (
         <div className="w-full mx-auto bg-white border rounded-md focus:outline-none focus:ring-1 border-gray-300 focus:ring-black">
@@ -119,6 +118,16 @@ function Toolbar({ editor }: { editor: Editor | null }) {
                     onChange={uploadImage}
                 />
             </label>
+            <button
+                type="button"
+                className={buttonStyle}
+                onClick={() => {
+                    if (!editor) return;
+                    editor.commands.clearContent();
+                }}
+            >
+                <Trash2 className="w-5 h-5" />
+            </button>
         </div>
     )
 }
