@@ -6,46 +6,44 @@ import { Input } from "@/app/components/common/InputBox";
 import ProjectEditor from "@/app/components/common/ProjectEditor";
 import { SelectBox } from "@/app/components/common/SelectBox";
 import { defaultPostValues } from "@/app/constants/post";
+import { useGlobalData } from "@/app/hooks/useGlobalData";
 import { Category } from "@/app/interfaces/category";
 import { PostRequest } from "@/app/interfaces/post";
 import { Tag } from "@/app/interfaces/tag";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 
-const tagList: Tag[] = [
-    { id: "1", name: "React" },
-    { id: "2", name: "Next.js" },
-    { id: "3", name: "TypeScript" },
-    { id: "4", name: "Tailwind" },
-    { id: "5", name: "Node.js" },
-];
-
-const categoryList: Category[] = [
-    { id: "1", name: "Front-end" },
-    { id: "2", name: "Back-end" },
-    { id: "3", name: "Security" },
-    { id: "4", name: "Devops" },
-    { id: "5", name: "Project Management" },
-];
-
 const CreatePost = () => {
+    const { categories, tags } = useGlobalData();
+
     const { register, handleSubmit, setValue, reset } = useForm<PostRequest>({
         defaultValues: defaultPostValues,
     });
 
     const [file, setFile] = useState<File | null>(null);
+    const [preview, setPreview] = useState<string | null>(null);
+
     const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
     const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
     const [editorHtml, setEditorHtml] = useState(defaultPostValues.content);
     const [editorJson, setEditorJson] = useState(defaultPostValues.contentJson);
     const [editorKey, setEditorKey] = useState(0);
 
+    // Thumbnail handling
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files.length > 0) {
-            setFile(e.target.files[0]);
+            const selectedFile = e.target.files[0];
+            setFile(selectedFile);
+            setPreview(URL.createObjectURL(selectedFile));
         }
     };
 
+    const handleRemoveFile = () => {
+        setFile(null);
+        setPreview(null);
+    };
+
+    // Editor handling
     const handleEditorChange = (html: string, json: unknown) => {
         setEditorHtml(html);
         setEditorJson(json as Record<string, unknown>);
@@ -53,17 +51,7 @@ const CreatePost = () => {
         setValue("contentJson", json as Record<string, unknown>);
     };
 
-    const onSubmit = (data: PostRequest, status: "DRAFT" | "PUBLISHED") => {
-        const payload: PostRequest = {
-            ...data,
-            postStatus: status,
-            categoryIds: selectedCategories.map((c) => c.id),
-            tagIds: selectedTags.map((t) => t.id),
-        };
-        console.log("Submit Data:", payload);
-    };
-
-
+    // Discard handling
     const handleDiscard = () => {
         reset(defaultPostValues);
         setEditorHtml("");
@@ -71,9 +59,22 @@ const CreatePost = () => {
         setSelectedTags([]);
         setSelectedCategories([]);
         setFile(null);
+        setPreview(null);
         setEditorKey(prev => prev + 1);
     };
 
+    // Create post
+    const onSubmit = async (data: PostRequest, status: "DRAFT" | "PUBLISHED") => {
+        const payload: PostRequest = {
+            ...data,
+            postStatus: status,
+            categoryIds: selectedCategories.map((c) => c.id),
+            tagIds: selectedTags.map((t) => t.id),
+        };
+        console.log("Submit data: " + payload)
+    };
+
+    // Calculate min date
     const minDate = new Date();
     minDate.setDate(minDate.getDate() + 3);
     const minDateStr = minDate.toISOString().split("T")[0];
@@ -121,9 +122,9 @@ const CreatePost = () => {
                         <h1 className="text-xl font-semibold mb-[0.5rem]">Your thumbnail*</h1>
                         <FileInput
                             onChange={handleFileChange}
-                            className="w-full"
-                            required
-                            wrapperClassName="mb-[0.5rem]"
+                            preview={preview}
+                            onRemove={handleRemoveFile}
+                            className="w-full mb-[0.5rem]"
                         />
                         <p className="text-sm text-gray-500 mb-2">
                             Choose a high-quality image that represents your post content
@@ -131,37 +132,16 @@ const CreatePost = () => {
                         </p>
                     </div>
 
-                    {/* Tags */}
-                    <div className="mb-[2rem]">
-                        <h1 className="text-xl font-semibold mb-[0.5rem]">Your tag*</h1>
-                        <SelectBox
-                            items={tagList}
-                            selectedItems={selectedTags}
-                            setSelectedItems={setSelectedTags}
-                            labelKey="name"
-                            valueKey="id"
-                            placeholder="Search tag..."
-                            maxSelected={5}
-                            className="w-full"
-                        />
-                        <p className="text-sm text-gray-500 mt-[0.5rem]">
-                            Type to search for existing tags or create a new one.{" "}
-                            <span className="font-extrabold">
-                                Minimum 1 tag, maximum 5 tags.
-                            </span>
-                        </p>
-                    </div>
-
                     {/* Categories */}
                     <div className="mb-[2rem]">
                         <h1 className="text-xl font-semibold mb-[0.5rem]">Your category*</h1>
                         <SelectBox
-                            items={categoryList}
+                            items={categories}
                             selectedItems={selectedCategories}
                             setSelectedItems={setSelectedCategories}
                             labelKey="name"
                             valueKey="id"
-                            placeholder="Search category..."
+                            placeholder="Your post categories. Example: Back-end, Front-end..."
                             maxSelected={3}
                             className="w-full"
                         />
@@ -169,6 +149,27 @@ const CreatePost = () => {
                             Choose categories that best describe your post.{" "}
                             <span className="font-extrabold">
                                 Minimum 1 category, maximum 3 categories.
+                            </span>
+                        </p>
+                    </div>
+
+                    {/* Tags */}
+                    <div className="mb-[2rem]">
+                        <h1 className="text-xl font-semibold mb-[0.5rem]">Your tag*</h1>
+                        <SelectBox
+                            items={tags}
+                            selectedItems={selectedTags}
+                            setSelectedItems={setSelectedTags}
+                            labelKey="name"
+                            valueKey="id"
+                            placeholder="Your post tags. Example: React.js, Next.js..."
+                            maxSelected={5}
+                            className="w-full"
+                        />
+                        <p className="text-sm text-gray-500 mt-[0.5rem]">
+                            Type to search for existing tags or create a new one.{" "}
+                            <span className="font-extrabold">
+                                Minimum 1 tag, maximum 5 tags.
                             </span>
                         </p>
                     </div>

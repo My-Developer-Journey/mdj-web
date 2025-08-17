@@ -1,5 +1,3 @@
-'use client';
-
 import { User } from "@/app/interfaces/user";
 import { api } from "@/utilities/api";
 

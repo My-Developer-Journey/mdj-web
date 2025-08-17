@@ -2,110 +2,109 @@
 
 import { useAuth } from '@/app/contexts/AuthContext';
 import { User } from '@/app/interfaces/user';
-import { updateProfile } from '@/app/services/userService';
+import { updateProfile } from '@/app/services/user.service';
 import { useEffect, useRef, useState } from 'react';
 
 type EditPersonalInfoModalProps = Pick<User,
   'displayName' | 'bio' | 'gender' | 'phoneNumber' | 'email' | 'facebookUrl' | 'githubUrl'
 > & {
-    isModalOpen: boolean;
-    onClose: () => void;
+  isModalOpen: boolean;
+  onClose: () => void;
 };
 
 const EditPersonalInfoModal = ({
-    isModalOpen,
-    onClose,
-    gender,
-    bio,
-    displayName,
-    phoneNumber,
-    email,
-    facebookUrl,
-    githubUrl,
+  isModalOpen,
+  onClose,
+  gender,
+  bio,
+  displayName,
+  phoneNumber,
+  email,
+  facebookUrl,
+  githubUrl,
 }: EditPersonalInfoModalProps) => {
-    const modalRef = useRef<HTMLDivElement>(null);
-    const { setUser } = useAuth();
-    const [errors, setErrors] = useState<Record<string, string>>({}); 
+  const modalRef = useRef<HTMLDivElement>(null);
+  const { setUser } = useAuth();
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
-    const [form, setForm] = useState<Pick<User, 'displayName' | 'bio' | 'gender' | 'phoneNumber' | 'email' | 'facebookUrl' | 'githubUrl'>>({
+  const [form, setForm] = useState<Pick<User, 'displayName' | 'bio' | 'gender' | 'phoneNumber' | 'email' | 'facebookUrl' | 'githubUrl'>>({
+    displayName: displayName ?? "",
+    bio: bio ?? "",
+    gender: gender ?? "",
+    phoneNumber: phoneNumber ?? "",
+    email: email ?? "",
+    facebookUrl: facebookUrl ?? "",
+    githubUrl: githubUrl ?? ""
+  });
+
+  useEffect(() => {
+    setForm({
       displayName: displayName ?? "",
       bio: bio ?? "",
-      gender: gender ?? "",
+      gender: gender !== undefined && gender !== null ? String(gender) : "",
       phoneNumber: phoneNumber ?? "",
       email: email ?? "",
       facebookUrl: facebookUrl ?? "",
       githubUrl: githubUrl ?? ""
     });
+  }, [displayName, bio, gender, phoneNumber, email, facebookUrl, githubUrl]);
 
-    useEffect(() => {
-      setForm({
-        displayName: displayName ?? "",
-        bio: bio ?? "",
-        gender: gender !== undefined && gender !== null ? String(gender) : "",
-        phoneNumber: phoneNumber ?? "",
-        email: email ?? "",
-        facebookUrl: facebookUrl ?? "",
-        githubUrl: githubUrl ?? ""
-      });
-    }, [displayName, bio, gender, phoneNumber, email, facebookUrl, githubUrl]);
-
-    useEffect(() => {
-      const handleClickOutside = (event: MouseEvent) => {
-        if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
-          onClose();
-        }
-      };
-
-      if (isModalOpen) {
-        document.addEventListener('mousedown', handleClickOutside);
-      }
-
-      return () => {
-        document.removeEventListener('mousedown', handleClickOutside);
-      };
-    }, [isModalOpen, onClose]);
-
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-      setForm({ ...form, [e.target.name]: e.target.value });
-    };
-
-    const validateForm = () => {
-      const newErrors: { email?: string; phoneNumber?: string; gender?: string } = {};
-
-      // Kiểm tra email (regex chuẩn)
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
-        newErrors.email = "Please enter a valid email address.";
-      }
-
-      // Kiểm tra số điện thoại (ví dụ: chỉ chấp nhận 9-11 chữ số)
-      if (!/^\d{9,11}$/.test(form.phoneNumber)) {
-        newErrors.phoneNumber = "Please enter a valid phone number (9-11 digits).";
-      }
-      // Kiểm tra giới tính
-      if (form.gender === "" || form.gender === null || form.gender === undefined) {
-        newErrors.gender = "Please select your gender.";
-      }
-
-      setErrors(newErrors);
-      return Object.keys(newErrors).length === 0; // true nếu không có lỗi
-    };
-
-
-    const handleSubmit = async () => {
-      if (!validateForm()) return;
-      const res = await updateProfile(form);
-      if (res.ok) {
-        const updatedUser = await res.json();
-        setUser(updatedUser.data);
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
         onClose();
-      } else {
-        console.error('Update profile failed');
       }
     };
 
-    if (!isModalOpen) return null;
+    if (isModalOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
 
-    return (
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isModalOpen, onClose]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const validateForm = () => {
+    const newErrors: { email?: string; phoneNumber?: string; gender?: string } = {};
+
+    // Kiểm tra email (regex chuẩn)
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
+      newErrors.email = "Please enter a valid email address.";
+    }
+
+    // Kiểm tra số điện thoại (ví dụ: chỉ chấp nhận 9-11 chữ số)
+    if (!/^\d{9,11}$/.test(form.phoneNumber)) {
+      newErrors.phoneNumber = "Please enter a valid phone number (9-11 digits).";
+    }
+    // Kiểm tra giới tính
+    if (form.gender === "" || form.gender === null || form.gender === undefined) {
+      newErrors.gender = "Please select your gender.";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0; // true nếu không có lỗi
+  };
+
+
+  const handleSubmit = async () => {
+    if (!validateForm()) return;
+    const res = await updateProfile(form);
+    if (res.status == 200) {
+      setUser(res.data);
+      onClose();
+    } else {
+      console.error('Update profile failed');
+    }
+  };
+
+  if (!isModalOpen) return null;
+
+  return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
       <div
         ref={modalRef}
@@ -138,9 +137,8 @@ const EditPersonalInfoModal = ({
               value={form.email}
               onChange={handleChange}
               placeholder="Enter your email"
-              className={`border px-3 py-2 rounded-md outline-none focus:ring-2 w-72 ${
-                errors.email ? "border-red-500 focus:ring-red-400" : "border-gray-500 focus:ring-blue-400"
-              }`}
+              className={`border px-3 py-2 rounded-md outline-none focus:ring-2 w-72 ${errors.email ? "border-red-500 focus:ring-red-400" : "border-gray-500 focus:ring-blue-400"
+                }`}
             />
             {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
           </div>
@@ -152,9 +150,8 @@ const EditPersonalInfoModal = ({
               value={form.phoneNumber}
               onChange={handleChange}
               placeholder="Enter your phone number"
-              className={`border px-3 py-2 rounded-md outline-none focus:ring-2 w-72 ${
-                errors.phoneNumber ? "border-red-500 focus:ring-red-400" : "border-gray-500 focus:ring-blue-400"
-              }`}
+              className={`border px-3 py-2 rounded-md outline-none focus:ring-2 w-72 ${errors.phoneNumber ? "border-red-500 focus:ring-red-400" : "border-gray-500 focus:ring-blue-400"
+                }`}
             />
             {errors.phoneNumber && <p className="text-red-500 text-sm mt-1">{errors.phoneNumber}</p>}
           </div>
@@ -164,9 +161,8 @@ const EditPersonalInfoModal = ({
               name="gender"
               value={form.gender}
               onChange={handleChange}
-              className={`border px-3 py-2 rounded-md outline-none focus:ring-2 w-72 ${
-                errors.gender ? "border-red-500 focus:ring-red-400" : "border-gray-500 focus:ring-blue-400"
-              }`}
+              className={`border px-3 py-2 rounded-md outline-none focus:ring-2 w-72 ${errors.gender ? "border-red-500 focus:ring-red-400" : "border-gray-500 focus:ring-blue-400"
+                }`}
             >
               <option value="">Select gender</option>
               <option value="0">Male</option>

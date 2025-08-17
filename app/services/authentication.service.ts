@@ -1,5 +1,3 @@
-'use client';
-
 import { api } from "@/utilities/api";
 import { SignUp } from "../interfaces/authentication";
 

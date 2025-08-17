@@ -1,6 +1,6 @@
 'use client'
 
-import { signOut } from "@/app/services/authenticationService";
+import { signOut } from "@/app/services/authentication.service";
 import { Bell, PencilLine } from "lucide-react";
 import Image from "next/image";
 import Link from 'next/link';
@@ -27,10 +27,8 @@ export default function Header() {
         try {
             const res = await signOut();
 
-            const data = await res.json();
-
-            if (!res.ok) {
-                toast.error(data.message || "Logout failed");
+            if (res.status !== 200) {
+                toast.error(res.message || "Logout failed");
                 return;
             }
 
@@ -107,7 +105,7 @@ export default function Header() {
                                         <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 whitespace-nowrap 
                                                         bg-black text-white text-xs rounded px-2 py-1 opacity-0 
                                                         group-hover:opacity-100 transition-opacity duration-200 z-50">
-                                        Write post
+                                            Write post
                                         </div>
                                     </div>
 
@@ -125,31 +123,31 @@ export default function Header() {
                                     {/* Avatar + Dropdown */}
                                     <div className="relative">
                                         <Image
-                                        src={user.avatar || "/default-avatar.png"}
-                                        height={100}
-                                        width={100}
-                                        alt="Avatar"
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            setShowDropdown((prev) => !prev);
-                                        }}
-                                        className="rounded-full object-cover w-10 h-10 cursor-pointer"
+                                            src={user.avatar || "/default-avatar.png"}
+                                            height={100}
+                                            width={100}
+                                            alt="Avatar"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                setShowDropdown((prev) => !prev);
+                                            }}
+                                            className="rounded-full object-cover w-10 h-10 cursor-pointer"
                                         />
                                         {showDropdown && (
-                                        <div className="absolute right-0 top-12 bg-white shadow-lg rounded-md py-2 w-48 z-50">
-                                            <Link
-                                            href={`/${user?.displayName}`}
-                                            className="block px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                                            >
-                                            Profile
-                                            </Link>
-                                            <button
-                                            onClick={handleLogout}
-                                            className="block w-full text-left px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                                            >
-                                            Logout
-                                            </button>
-                                        </div>
+                                            <div className="absolute right-0 top-12 bg-white shadow-lg rounded-md py-2 w-48 z-50">
+                                                <Link
+                                                    href={`/${user?.displayName}`}
+                                                    className="block px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                                                >
+                                                    Profile
+                                                </Link>
+                                                <button
+                                                    onClick={handleLogout}
+                                                    className="block w-full text-left px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                                                >
+                                                    Logout
+                                                </button>
+                                            </div>
                                         )}
                                     </div>
                                 </div>
