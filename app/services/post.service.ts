@@ -1,5 +1,3 @@
-'use client';
-
 import { api } from "@/utilities/api";
 import { PostRequest } from "../interfaces/post";
 

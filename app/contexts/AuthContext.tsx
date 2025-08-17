@@ -3,9 +3,9 @@
 import { User } from '@/app/interfaces/user';
 import { AuthContextType } from '@/app/types/authentication';
 import { createContext, useContext, useEffect, useState } from 'react';
-import { userProfile } from '../services/userService';
+import { userProfile } from '../services/user.service';
 
-const AuthContext = createContext<AuthContextType>({ user: null, isLoading: true, setUser: () => {} });
+const AuthContext = createContext<AuthContextType>({ user: null, isLoading: true, setUser: () => { } });
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const [user, _setUser] = useState<User | null>(null);
@@ -19,13 +19,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         const fetchMe = async () => {
             try {
                 const res = await userProfile();
-
-                if (res.ok) {
-                    const userData = await res.json();
-                    setUser(userData.data);
-                } else {
-                    setUser(null);
-                }
+                setUser(res.data);
             } catch (err) {
                 console.error('No user to fetch:', err);
                 setUser(null);

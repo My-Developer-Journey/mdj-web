@@ -1,7 +1,7 @@
 'use client'
 
 import { User } from '@/app/interfaces/user';
-import { uploadAvatar } from '@/app/services/userService';
+import { uploadAvatar } from '@/app/services/user.service';
 import Image from "next/image";
 import { useRef, useState } from 'react';
 import { FaCamera, FaFacebook, FaGithub } from "react-icons/fa";
@@ -25,17 +25,17 @@ const MyAccountCard = ({
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-  const file = e.target.files?.[0];
-  if (file) {
-    const url = URL.createObjectURL(file);
-    setPreview(url);
-    try {
-      await uploadAvatar(file, email);
-    } catch (err) {
-      console.error(err);
+    const file = e.target.files?.[0];
+    if (file) {
+      const url = URL.createObjectURL(file);
+      setPreview(url);
+      try {
+        await uploadAvatar(file, email);
+      } catch (err) {
+        console.error(err);
+      }
     }
-  }
-};
+  };
   return (
     <Card className="w-full px-[2rem] py-[1rem] h-full">
       <CardContent className="flex gap-6 items-center justify-between">
