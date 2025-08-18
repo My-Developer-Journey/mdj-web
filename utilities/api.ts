@@ -7,12 +7,17 @@ export const api = async <T = any>(
     options: RequestInit = {}
 ): Promise<ApiResponse<T>> => {
     const url = `${BASE_URL}${path}`;
+
+    const isFormData = options.body instanceof FormData;
+
+    const headers = {
+        ...(isFormData ? {} : { "Content-Type": "application/json" }),
+        ...(options.headers || {}),
+    };
+
     const res = await fetch(url, {
         ...options,
-        headers: {
-        "Content-Type": "application/json",
-        ...(options.headers || {}),
-        },
+        headers,
         credentials: "include",
     });
 
