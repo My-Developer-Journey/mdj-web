@@ -1,7 +1,7 @@
-import { User } from "../interfaces/user";
+import { UserResponse } from "../interfaces/user";
 
 export type AuthContextType = {
-    user: User | null;
+    user: UserResponse | null;
     isLoading: boolean;
-    setUser: (user: User | null) => void;
+    setUser: (user: UserResponse | null) => void;
 };

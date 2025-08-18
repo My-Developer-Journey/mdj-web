@@ -12,6 +12,21 @@ export type User = {
     createdDate: string;
 };
 
+export type UserResponse = {
+    id: string;
+    email: string;
+    displayName: string;
+    phoneNumber: string;
+    avatar?: string;
+    bio?: string;
+    facebookUrl?: string;
+    githubUrl?: string;
+    gender: string;
+    status: string;
+    role: string;
+    createdDate: string;
+};
+
 export interface Author {
     avatar?: string;
     name?: string;

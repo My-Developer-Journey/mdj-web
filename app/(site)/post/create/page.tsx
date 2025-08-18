@@ -6,15 +6,21 @@ import { Input } from "@/app/components/common/InputBox";
 import ProjectEditor from "@/app/components/common/ProjectEditor";
 import { SelectBox } from "@/app/components/common/SelectBox";
 import { defaultPostValues } from "@/app/constants/post";
+import { useAuth } from "@/app/contexts/AuthContext";
+import { useLoading } from "@/app/contexts/LoadingContext";
 import { useGlobalData } from "@/app/hooks/useGlobalData";
 import { Category } from "@/app/interfaces/category";
 import { PostRequest } from "@/app/interfaces/post";
 import { Tag } from "@/app/interfaces/tag";
-import { useState } from "react";
+import { addPost, checkDraftExist } from "@/app/services/post.service";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 
 const CreatePost = () => {
     const { categories, tags } = useGlobalData();
+    const { setLoading } = useLoading();
+    const { user } = useAuth();
 
     const { register, handleSubmit, setValue, reset } = useForm<PostRequest>({
         defaultValues: defaultPostValues,
@@ -28,6 +34,38 @@ const CreatePost = () => {
     const [editorHtml, setEditorHtml] = useState(defaultPostValues.content);
     const [editorJson, setEditorJson] = useState(defaultPostValues.contentJson);
     const [editorKey, setEditorKey] = useState(0);
+
+
+    useEffect(() => {
+        const fetchDraft = async () => {
+            try {
+                setLoading(true);
+                const res = await checkDraftExist();
+                if (res.status === 200 && res.data) {
+                    const draft = res.data;
+                    // Gán data cho form
+                    reset({
+                        title: draft.title,
+                        content: draft.content,
+                        contentJson: draft.contentJson,
+                        scheduledPublishDate: draft.scheduledPublishDate
+                    });
+
+                    setEditorHtml(draft.content);
+                    setEditorJson(draft.contentJson);
+                    setSelectedCategories(draft.categories || []);
+                    setSelectedTags(draft.tags || []);
+                    setPreview(draft.thumbnail || null);
+                }
+            } catch (err) {
+                console.log("Error loading draft:", err);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchDraft();
+    }, []);
 
     // Thumbnail handling
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -65,13 +103,31 @@ const CreatePost = () => {
 
     // Create post
     const onSubmit = async (data: PostRequest, status: "DRAFT" | "PUBLISHED") => {
-        const payload: PostRequest = {
-            ...data,
-            postStatus: status,
-            categoryIds: selectedCategories.map((c) => c.id),
-            tagIds: selectedTags.map((t) => t.id),
-        };
-        console.log("Submit data: " + payload)
+        try {
+            setLoading(true);
+            const payload: PostRequest = {
+                ...data,
+                authorId: user?.id || "",
+                postStatus: status,
+                categoryIds: selectedCategories.map((c) => c.id),
+                tagIds: selectedTags.map((t) => t.id),
+            };
+            console.log(payload);
+
+            const res = await addPost(payload, file);
+            if (res.status !== 200) {
+                console.log(res);
+                toast.error(res.message);
+            } else {
+                toast.success(res.message);
+            }
+        } catch (err: unknown) {
+            const message = err instanceof Error ? err.message : String(err);
+            console.log(message);
+            toast.error(message);
+        } finally {
+            setLoading(false);
+        }
     };
 
     // Calculate min date
@@ -79,8 +135,6 @@ const CreatePost = () => {
     minDate.setDate(minDate.getDate() + 3);
     const minDateStr = minDate.toISOString().split("T")[0];
 
-    console.log(editorHtml);
-    console.log(file);
     console.log(editorJson);
 
     return (
