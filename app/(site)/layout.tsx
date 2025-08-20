@@ -4,6 +4,7 @@ import Header from "../components/common/Header";
 import FooterWrapper from "../components/wrappers/FooterWrapper";
 import { AuthProvider } from '../contexts/AuthContext';
 import { LoadingProvider } from '../contexts/LoadingContext';
+import SWRProvider from '../contexts/SWRProvider';
 import "../globals.css";
 
 export default function RootLayout({
@@ -16,20 +17,22 @@ export default function RootLayout({
       <body className="flex flex-col min-h-screen min-w-[var(--min-width)] max-w-[var(--max-width)] mx-auto">
         <AuthProvider>
           <LoadingProvider>
-            <Header/>
-            <main className="py-5 px-[5rem] mt-[7rem] flex-1">{children}</main>
-            <ToastContainer
-              toastClassName="font-medium min-h-[4rem] rounded-lg shadow-md"
-              position="top-right"
-              autoClose={3000}
-              hideProgressBar={false}
-              newestOnTop={true}
-              closeOnClick
-              pauseOnFocusLoss
-              draggable
-              pauseOnHover
-            />
-            <FooterWrapper/>
+            <SWRProvider>
+              <Header />
+              <main className="py-5 px-[5rem] mt-[7rem] flex-1">{children}</main>
+              <ToastContainer
+                toastClassName="font-medium min-h-[4rem] rounded-lg shadow-md"
+                position="top-right"
+                autoClose={3000}
+                hideProgressBar={false}
+                newestOnTop={true}
+                closeOnClick
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+              />
+              <FooterWrapper />
+            </SWRProvider>
           </LoadingProvider>
         </AuthProvider>
       </body>

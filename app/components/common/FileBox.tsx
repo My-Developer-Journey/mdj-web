@@ -3,17 +3,17 @@
 import { InputProps } from "@/app/types/input";
 import { Trash2, Upload } from "lucide-react";
 import NextImage from "next/image";
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 
-export const FileInput: React.FC<InputProps> = ({
+export const FileInput: React.FC<InputProps & { preview?: string | null, onRemove?: () => void }> = ({
     error,
     wrapperClassName = '',
     className = '',
     onChange,
+    preview,
+    onRemove,
     ...props
 }) => {
-    const [preview, setPreview] = useState<string | null>(null);
-    const [validationError, setValidationError] = useState<string | null>(null);
     const inputRef = useRef<HTMLInputElement>(null);
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -30,16 +30,8 @@ export const FileInput: React.FC<InputProps> = ({
                 const isAspectRatioOk = Math.abs(aspectRatio - 16 / 9) <= 0.05;
 
                 if (isWideEnough && isAspectRatioOk) {
-                    setPreview(URL.createObjectURL(file));
-                    setValidationError(null);
                     if (onChange) onChange(e);
                 } else {
-                    setPreview(null);
-                    let message = "Image must be at least 1200px wide";
-                    if (!isAspectRatioOk) {
-                        message += " and have a 16:9 ratio";
-                    }
-                    setValidationError(message);
                     if (inputRef.current) inputRef.current.value = "";
                 }
             };
@@ -51,9 +43,8 @@ export const FileInput: React.FC<InputProps> = ({
     const handleRemoveImage = (e: React.MouseEvent) => {
         e.stopPropagation();
         e.preventDefault();
-        setPreview(null);
-        setValidationError(null);
         if (inputRef.current) inputRef.current.value = "";
+        if (onRemove) onRemove();
     };
 
     const handleClickBox = () => {
@@ -64,7 +55,7 @@ export const FileInput: React.FC<InputProps> = ({
         <div className={`flex flex-col gap-2 w-full ${wrapperClassName}`}>
             <div
                 className={`relative border-2 border-dashed rounded-md cursor-pointer transition-all overflow-hidden
-                ${error || validationError ? 'border-red-500' : 'border-gray-300 hover:border-black'}
+                ${error ? 'border-red-500' : 'border-gray-300 hover:border-black'}
                 ${className} group`}
                 onClick={handleClickBox}
             >
@@ -108,7 +99,6 @@ export const FileInput: React.FC<InputProps> = ({
             </div>
 
             {error && <span className="text-sm text-red-500">{error}</span>}
-            {validationError && <span className="text-sm text-red-500">{validationError}</span>}
         </div>
     );
 };

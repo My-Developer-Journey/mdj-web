@@ -1,6 +1,6 @@
 "use client";
 
-import { signUp } from "@/app/services/authenticationService";
+import { signUp } from "@/app/services/authentication.service";
 import { Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from 'next/navigation';
@@ -11,7 +11,7 @@ import { useLoading } from '../../contexts/LoadingContext';
 const SignUp = () => {
   const router = useRouter();
   const { setLoading } = useLoading();
-  
+
   const [email, setEmail] = useState("");
   const [displayName, setDisplayName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -30,38 +30,37 @@ const SignUp = () => {
     setGeneralError("");
 
     if (password !== confirmedPassword) {
-        setErrors((prev) => ({ ...prev, confirmedPassword: "Passwords do not match." }));
-        setLoading(false);
-        return;
+      setErrors((prev) => ({ ...prev, confirmedPassword: "Passwords do not match." }));
+      setLoading(false);
+      return;
     }
 
     try {
-        const res = await signUp({
-          email,
-          displayName,
-          gender,
-          password,
-          phoneNumber,
-          confirmedPassword,
-          role: 1
-        });
+      const res = await signUp({
+        email,
+        displayName,
+        gender,
+        password,
+        phoneNumber,
+        confirmedPassword,
+        role: 1
+      });
 
-        const result = await res.json();
-
-        if (!res.ok) {
-            if (result?.data) {
-                setErrors(result.data);
-            }
-            setGeneralError(result.message || "Sign up failed");
-            return;
+      if (res.status !== 200) {
+        if (res.data) {
+          setErrors(res.data);
         }
+        setGeneralError(res.message || "Sign up failed");
+        return;
+      }
 
-        router.push("/email-sent?from=signup");
+
+      router.push("/email-sent?from=signup");
     } catch (err) {
-        console.error("Signup error:", err);
-        setGeneralError("Something went wrong");
+      console.error("Signup error:", err);
+      setGeneralError("Something went wrong");
     } finally {
-        setLoading(false);
+      setLoading(false);
     }
   };
 

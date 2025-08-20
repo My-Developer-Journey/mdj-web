@@ -1,7 +1,7 @@
 'use client'
 
-import { signIn } from "@/app/services/authenticationService";
-import { userProfile } from "@/app/services/userService";
+import { signIn } from "@/app/services/authentication.service";
+import { userProfile } from "@/app/services/user.service";
 import { Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from 'next/navigation';
@@ -14,7 +14,7 @@ const Login = () => {
   const router = useRouter();
   const { setUser } = useAuth();
   const { setLoading } = useLoading();
-  
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -25,48 +25,35 @@ const Login = () => {
     setLoading(true);
 
     try {
-        const res = await signIn({ email, password });
+      const loginResult = await signIn({ email, password });
 
-        if (!res.ok) {
-            const error = await res.json();
+      if (
+        loginResult.message ===
+        "Internal server error: Your account is not verified. A new verification email has been sent."
+      ) {
+        router.push("/email-sent?from=login");
+        return;
+      }
 
-            if (
-                error.message ===
-                "Internal server error: Your account is not verified. A new verification email has been sent."
-            ) {
-                router.push("/email-sent?from=login");
-                return;
-            }
+      const userData = await userProfile();
 
-            setLoginError(error.message || "Login failed");
-            return;
-        }
-
-        const userRes = await userProfile();
-
-        if (userRes.ok) {
-            const userData = await userRes.json();
-            setUser(userData.data);
-            setLoginError("");
-            if (userData.data.role === 0) {
-              router.push("/admin");
-            } else {
-              router.push("/"); 
-            }
-        } else {
-            setUser(null);
-            setLoginError("Unable to load user profile.");
-        }
+      setUser(userData.data);
+      setLoginError("");
+      router.push("/");
     } catch (err) {
-        console.error("Login error:", err);
+      if (err instanceof Error) {
+        setLoginError(err.message);
+      } else if (typeof err === "object" && err !== null && "message" in err) {
+        setLoginError(String((err as { message: string }).message));
+      } else {
         setLoginError("Something went wrong!");
+      }
+
+      setUser(null);
     } finally {
-        setLoading(false);
+      setLoading(false);
     }
   };
-
-
-
 
   return (
     <div className="mt-[8rem] flex flex-col justify-center items-center">
@@ -106,14 +93,13 @@ const Login = () => {
             </div>
           </div>
           <div className="flex items-center justify-between mb-[1rem]">
-              <p
-                className={`text-sm text-red-500 transition-all duration-200 font-semibold ${
-                  loginError ? "visible" : "invisible"
+            <p
+              className={`text-sm text-red-500 transition-all duration-200 font-semibold ${loginError ? "visible" : "invisible"
                 } truncate max-w-full`}
-              >
-                {loginError || "placeholder"}
-              </p>
-              <Link href="/forgot-password" className="text-sm text-[var(--primary-black)] hover:underline">Forgot password?</Link>
+            >
+              {loginError || "placeholder"}
+            </p>
+            <Link href="/forgot-password" className="text-sm text-[var(--primary-black)] hover:underline">Forgot password?</Link>
           </div>
 
           <button
