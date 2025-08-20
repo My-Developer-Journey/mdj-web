@@ -28,3 +28,25 @@ export const checkDraftExist = async () => {
     method: "GET"
   });
 };
+
+export const updatePost = (postId: string, data: PostRequest, file: File | null = null) => {
+  const formData = new FormData();
+
+  if (data.scheduledPublishDate && !data.scheduledPublishDate.includes("T")) {
+    data.scheduledPublishDate = `${data.scheduledPublishDate}T00:00:00`;
+  }
+
+  formData.append(
+    "request",
+    new Blob([JSON.stringify(data)], { type: "application/json" })
+  );
+
+  if (file) {
+    formData.append("file", file);
+  }
+
+  return api(`/posts/${postId}`, {
+    method: "PUT",
+    body: formData,
+  });
+};
