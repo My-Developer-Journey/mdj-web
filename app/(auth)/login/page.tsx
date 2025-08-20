@@ -48,7 +48,11 @@ const Login = () => {
             const userData = await userRes.json();
             setUser(userData.data);
             setLoginError("");
-            router.push("/");
+            if (userData.data.role === 0) {
+              router.push("/admin");
+            } else {
+              router.push("/"); 
+            }
         } else {
             setUser(null);
             setLoginError("Unable to load user profile.");
