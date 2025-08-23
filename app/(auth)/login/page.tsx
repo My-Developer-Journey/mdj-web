@@ -39,7 +39,14 @@ const Login = () => {
 
       setUser(userData.data);
       setLoginError("");
-      router.push("/");
+
+      console.log(userData.data);
+
+      if (userData.data?.role === "ADMIN") {
+        router.push("/admin/");
+      } else {
+        router.push("/");
+      }
     } catch (err) {
       if (err instanceof Error) {
         setLoginError(err.message);

@@ -1,11 +1,10 @@
 "use client";
+import AdminSideBar from "@/app/components/admin/AdminSideBar";
+import AdminTopCrumb from "@/app/components/admin/AdminTopCrumb";
 import React, { SVGProps } from "react";
 
 /* ================== Inline SVG Icons (không import lib ngoài) ================== */
 const Icon = {
-  ChevronLeft: (p: SVGProps<SVGSVGElement>) => (
-    <svg viewBox="0 0 24 24" fill="none" {...p}><path d="M15 19L8 12l7-7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
-  ),
   Dots: (p: SVGProps<SVGSVGElement>) => (
     <svg viewBox="0 0 24 24" fill="none" {...p}><circle cx="5" cy="12" r="2" fill="currentColor"/><circle cx="12" cy="12" r="2" fill="currentColor"/><circle cx="19" cy="12" r="2" fill="currentColor"/></svg>
   ),
@@ -24,107 +23,20 @@ const Icon = {
   Circle: (p: SVGProps<SVGSVGElement>) => (
     <svg viewBox="0 0 24 24" fill="none" {...p}><circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.8"/></svg>
   ),
-  Search: (p: SVGProps<SVGSVGElement>) => (
-    <svg viewBox="0 0 24 24" fill="none" {...p}><circle cx="11" cy="11" r="7" stroke="currentColor" strokeWidth="1.8"/><path d="m20 20-3.5-3.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/></svg>
-  ),
-  Bell: (p: SVGProps<SVGSVGElement>) => (
-    <svg viewBox="0 0 24 24" fill="none" {...p}><path d="M6 8a6 6 0 1 1 12 0c0 6 2 6 2 8H4c0-2 2-2 2-8Z" stroke="currentColor" strokeWidth="1.8"/><path d="M10 20a2 2 0 0 0 4 0" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/></svg>
-  ),
-  Home: (p: SVGProps<SVGSVGElement>) => (
-    <svg viewBox="0 0 24 24" fill="none" {...p}><path d="M3 10 12 3l9 7v10a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1V10Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round"/></svg>
-  ),
-  Users: (p: SVGProps<SVGSVGElement>) => (
-    <svg viewBox="0 0 24 24" fill="none" {...p}><circle cx="8" cy="8" r="3" stroke="currentColor" strokeWidth="1.6"/><path d="M2 20a6 6 0 0 1 12 0" stroke="currentColor" strokeWidth="1.6"/><circle cx="17" cy="9" r="2.5" stroke="currentColor" strokeWidth="1.6"/><path d="M14.5 20a4.5 4.5 0 0 1 7 0" stroke="currentColor" strokeWidth="1.6"/></svg>
-  ),
-  File: (p: SVGProps<SVGSVGElement>) => (
-    <svg viewBox="0 0 24 24" fill="none" {...p}><path d="M6 2h7l5 5v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Z" stroke="currentColor" strokeWidth="1.6"/><path d="M13 2v5h5" stroke="currentColor" strokeWidth="1.6"/></svg>
-  ),
-  Coins: (p: SVGProps<SVGSVGElement>) => (
-    <svg viewBox="0 0 24 24" fill="none" {...p}><ellipse cx="8" cy="6" rx="5" ry="3" stroke="currentColor" strokeWidth="1.6"/><path d="M3 6v6c0 1.7 2.2 3 5 3s5-1.3 5-3V6" stroke="currentColor" strokeWidth="1.6"/><ellipse cx="16" cy="12" rx="5" ry="3" stroke="currentColor" strokeWidth="1.6"/></svg>
-  ),
-  Message: (p: SVGProps<SVGSVGElement>) => (
-    <svg viewBox="0 0 24 24" fill="none" {...p}><path d="M20 15a3 3 0 0 1-3 3H9l-5 3V6a3 3 0 0 1 3-3h10a3 3 0 0 1 3 3v9Z" stroke="currentColor" strokeWidth="1.6"/></svg>
-  ),
-  Settings: (p: SVGProps<SVGSVGElement>) => (
-    <svg viewBox="0 0 24 24" fill="none" {...p}><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" stroke="currentColor" strokeWidth="1.6"/><path d="m19.4 15 .9 1.6-1.7 3-1.8-.7a8.9 8.9 0 0 1-1.9 1.1l-.3 1.9H9.4l-.3-1.9a9.6 9.6 0 0 1-1.9-1.1l-1.8.7-1.7-3 .9-1.6a9.5 9.5 0 0 1 0-2.1L2.1 11l1.7-3 1.8.7a9 9 0 0 1 1.9-1.1l.3-1.9h4.5l.3 1.9a9 9 0 0 1 1.9 1.1l1.8-.7 1.7 3-1 .9c.1.7.1 1.4 0 2.1Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round"/></svg>
-  ),
 };
 
 /* ================== Trang ================== */
 export default function AdminPeopleDetailOneFile() {
   return (
-    <div className="min-h-screen bg-[#f6f7fb] p-6">
-      {/* Browser frame mock */}
-      <div className="mx-auto max-w-[1100px] rounded-[18px] bg-white shadow-[0_6px_30px_rgba(30,41,59,0.08)] overflow-hidden">
-        <div className="h-10 px-4 flex items-center justify-between bg-[#fafbff] border-b">
-          <div className="flex items-center gap-2">
-            <span className="w-3 h-3 bg-[#ff5f57] rounded-full" />
-            <span className="w-3 h-3 bg-[#ffbd2e] rounded-full" />
-            <span className="w-3 h-3 bg-[#28c840] rounded-full" />
-          </div>
-          <div className="text-[13px] text-gray-500">golandpad.com</div>
-          <button className="p-1.5 rounded-lg hover:bg-gray-100">
-            <Icon.Dots className="w-4 h-4 text-gray-600" />
-          </button>
-        </div>
-
+    <div className="min-h-screen bg-[#f6f7fb]">
         <div className="grid grid-cols-[240px_1fr]">
           {/* Sidebar */}
-          <aside className="border-r bg-white/70">
-            <div className="p-4 flex items-center gap-3">
-              <div className="w-9 h-9 rounded-full bg-[#ef4444] text-white flex items-center justify-center text-sm font-semibold">E</div>
-              <div className="leading-tight">
-                <div className="text-[13px] font-medium">Elijah Scott</div>
-                <div className="text-[12px] text-gray-500">scott@hey.com</div>
-              </div>
-            </div>
-
-            <div className="px-4 space-y-6 pb-6">
-              <Section title="Manage">
-                <Item icon={<Icon.Home className="w-4 h-4" />} label="Home" />
-                <Item icon={<Icon.Calendar className="w-4 h-4" />} label="Programs" />
-                <Item icon={<Icon.Calendar className="w-4 h-4" />} label="Events" />
-                <Item icon={<Icon.Users className="w-4 h-4" />} label="Memberships" />
-                <Item icon={<Icon.File className="w-4 h-4" />} label="Documents" />
-              </Section>
-
-              <Section title="Members">
-                <Item icon={<Icon.Coins className="w-4 h-4" />} label="Payments" />
-              </Section>
-
-              <Section title="Engage">
-                <Item
-                  active
-                  icon={<Icon.Users className="w-4 h-4" />}
-                  label="People"
-                  highlight
-                />
-                <Item icon={<Icon.Message className="w-4 h-4" />} label="Communication" />
-              </Section>
-
-              <Section title="More">
-                <Item icon={<Icon.Bell className="w-4 h-4" />} label="Notifications" badge="2" />
-                <Item icon={<Icon.Search className="w-4 h-4" />} label="Search" />
-              </Section>
-            </div>
-
-            <div className="mt-6 px-4 py-4 border-t">
-              <Item icon={<Icon.Settings className="w-4 h-4" />} label="Settings" />
-            </div>
-          </aside>
+          <AdminSideBar/>
 
           {/* Main */}
           <main className="bg-white">
             {/* Top crumb + edit */}
-            <div className="px-6 py-4 flex items-center justify-between border-b">
-              <div className="flex items-center gap-2 text-[13px] text-gray-500">
-                <button className="p-1.5 rounded-lg hover:bg-gray-100">
-                  <Icon.ChevronLeft className="w-4 h-4 text-gray-700" />
-                </button>
-                <span>Charlotee Bell</span>
-              </div>
-              <button className="px-2 py-1.5 text-[12px] rounded-lg border hover:bg-gray-50">✎</button>
-            </div>
+            <AdminTopCrumb/>
 
             {/* Profile header */}
             <div className="px-6 py-5">
@@ -256,42 +168,6 @@ export default function AdminPeopleDetailOneFile() {
             </div>
           </main>
         </div>
-      </div>
-    </div>
-  );
-}
-
-/* ================== Helpers (cũng nằm trong file này) ================== */
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
-  return (
-    <div>
-      <div className="text-[11px] uppercase tracking-wide text-gray-400 mb-2">{title}</div>
-      <div className="space-y-1">{children}</div>
-    </div>
-  );
-}
-
-function Item({
-  icon,
-  label,
-  badge,
-  active,
-  highlight,
-}: {
-  icon: React.ReactNode;
-  label: string;
-  badge?: string;
-  active?: boolean;
-  highlight?: boolean;
-}) {
-  return (
-    <div className={`relative flex items-center justify-between gap-2 px-2 py-1.5 rounded-md cursor-default ${active ? "bg-[#f5f3ff]" : "hover:bg-gray-50"}`}>
-      {highlight && <span className="absolute left-0 top-0 bottom-0 w-[3px] rounded-r bg-[#7c3aed]" />}
-      <div className="flex items-center gap-2 text-[13px]">
-        <span className={`text-gray-600 ${active ? "text-[#7c3aed]" : ""}`}>{icon}</span>
-        <span className={`${active ? "text-[#7c3aed] font-medium" : "text-gray-700"}`}>{label}</span>
-      </div>
-      {badge && <span className="text-[11px] px-1.5 py-0.5 rounded-full bg-[#ef4444] text-white">{badge}</span>}
     </div>
   );
 }
