@@ -52,7 +52,6 @@ const Item = ({
   </div>
 )
 
-// Component chính
 const AdminSideBar = () => {
   return (
     <aside className="border-r-17 bg-gray-100 border-gray-500 w-64 p-4">

@@ -1,6 +1,6 @@
 "use client";
+import { CheckCircle, Circle} from "lucide-react";
 import React from "react";
-import Icon from "@/app/components/common/icon";
 
 export default function TimelineItem({
   icon,
@@ -13,7 +13,7 @@ export default function TimelineItem({
   text: React.ReactNode;
   color: "green" | "gray";
 }) {
-  const IconCmp = icon === "check" ? Icon.CheckCircle : Icon.Circle;
+  const IconCmp = icon === "check" ? CheckCircle : Circle;
   const colorClass = color === "green" ? "text-[#10b981]" : "text-gray-400";
   return (
     <li className="relative flex gap-3 py-3">
