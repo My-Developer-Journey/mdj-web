@@ -12,7 +12,7 @@ import { useGlobalData } from "@/app/hooks/useGlobalData";
 import { Category } from "@/app/interfaces/category";
 import { PostRequest } from "@/app/interfaces/post";
 import { Tag } from "@/app/interfaces/tag";
-import { addPost, checkDraftExist } from "@/app/services/post.service";
+import { addPost, checkDraftExist, updatePost } from "@/app/services/post.service";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
@@ -25,6 +25,9 @@ const CreatePost = () => {
     const { register, handleSubmit, setValue, reset } = useForm<PostRequest>({
         defaultValues: defaultPostValues,
     });
+
+    const [isDraft, setIsDraft] = useState<boolean>(false);
+    const [draftId, setDraftId] = useState<string | null>(null);
 
     const [file, setFile] = useState<File | null>(null);
     const [preview, setPreview] = useState<string | null>(null);
@@ -43,19 +46,19 @@ const CreatePost = () => {
                 const res = await checkDraftExist();
                 if (res.status === 200 && res.data) {
                     const draft = res.data;
-                    // Gán data cho form
+                    setIsDraft(true);
+                    setDraftId(draft.id);
                     reset({
                         title: draft.title,
                         content: draft.content,
                         contentJson: draft.contentJson,
-                        scheduledPublishDate: draft.scheduledPublishDate
+                        scheduledPublishDate: toDateInputValue(draft.scheduledPublishDate),
                     });
-
                     setEditorHtml(draft.content);
                     setEditorJson(draft.contentJson);
                     setSelectedCategories(draft.categories || []);
                     setSelectedTags(draft.tags || []);
-                    setPreview(draft.thumbnail || null);
+                    setPreview(draft.thumbnailUrl || null);
                 }
             } catch (err) {
                 console.log("Error loading draft:", err);
@@ -102,9 +105,14 @@ const CreatePost = () => {
     };
 
     // Create post
-    const onSubmit = async (data: PostRequest, status: "DRAFT" | "PUBLISHED") => {
+    const onSubmit = async (
+        data: PostRequest,
+        status: "DRAFT" | "PUBLISHED",
+        isDraft: boolean
+    ) => {
         try {
             setLoading(true);
+
             const payload: PostRequest = {
                 ...data,
                 authorId: user?.id || "",
@@ -112,30 +120,43 @@ const CreatePost = () => {
                 categoryIds: selectedCategories.map((c) => c.id),
                 tagIds: selectedTags.map((t) => t.id),
             };
-            console.log(payload);
 
-            const res = await addPost(payload, file);
+            console.log("Payload:", payload);
+
+            let res;
+
+            if (isDraft) {
+                if (!draftId) {
+                    throw new Error("No draftId found!");
+                }
+                res = await updatePost(draftId, payload, file);
+            } else {
+                res = await addPost(payload, file);
+            }
+
             if (res.status !== 200) {
-                console.log(res);
+                console.error(res);
                 toast.error(res.message);
             } else {
                 toast.success(res.message);
             }
         } catch (err: unknown) {
             const message = err instanceof Error ? err.message : String(err);
-            console.log(message);
+            console.error(message);
             toast.error(message);
         } finally {
             setLoading(false);
         }
     };
 
+    const toDateInputValue = (isoString: string) => {
+        return isoString.split('T')[0];
+    };
+
     // Calculate min date
     const minDate = new Date();
     minDate.setDate(minDate.getDate() + 3);
-    const minDateStr = minDate.toISOString().split("T")[0];
-
-    console.log(editorJson);
+    const minDateStr = toDateInputValue(minDate.toISOString());
 
     return (
         <div className="w-full flex justify-center">
@@ -149,7 +170,16 @@ const CreatePost = () => {
                         and inspire others through your words.
                     </h1>
                 </div>
+                <div>
 
+                </div>
+                {isDraft &&
+                    <div className="w-full">
+                        <h1 className="text-left text-md font-semibold text-red-500 mb-[1rem]">
+                            *Your last draft was restored
+                        </h1>
+                    </div>
+                }
                 <form
                     onSubmit={(e) => {
                         e.preventDefault();
@@ -234,6 +264,7 @@ const CreatePost = () => {
                         <ProjectEditor
                             key={editorKey}
                             initialHtml={editorHtml}
+                            initialJson={editorJson}
                             onChange={handleEditorChange}
                         />
                         <p className="text-sm text-gray-500 mt-[0.5rem]">
@@ -273,7 +304,7 @@ const CreatePost = () => {
                                 type="button"
                                 variant="gray"
                                 className="w-[10rem]"
-                                onClick={() => handleSubmit((data) => onSubmit(data, "DRAFT"))()}
+                                onClick={() => handleSubmit((data) => onSubmit(data, "DRAFT", isDraft))()}
                             >
                                 Save as draft
                             </AppButton>
@@ -282,7 +313,7 @@ const CreatePost = () => {
                                 variant="black"
                                 className="w-[10rem]"
                                 onClick={() =>
-                                    handleSubmit((data) => onSubmit(data, "PUBLISHED"))()
+                                    handleSubmit((data) => onSubmit(data, "PUBLISHED", isDraft))()
                                 }
                             >
                                 Submit

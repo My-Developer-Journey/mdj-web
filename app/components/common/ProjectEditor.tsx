@@ -14,8 +14,9 @@ import {
     List,
     Trash2
 } from 'lucide-react'
+import { useEffect } from 'react'
 
-export default function ProjectEditor({ initialHtml = '', onChange }: Props) {
+export default function ProjectEditor({ initialHtml = '', initialJson, onChange }: Props) {
     const editor = useEditor({
         extensions: [
             StarterKit,
@@ -26,7 +27,7 @@ export default function ProjectEditor({ initialHtml = '', onChange }: Props) {
                 emptyEditorClass: 'is-editor-empty',
             })
         ],
-        content: initialHtml?.trim() ? initialHtml : '',
+        content: initialJson ? initialJson : (initialHtml?.trim() || ''),
         immediatelyRender: false,
         editorProps: {
             attributes: {
@@ -37,6 +38,13 @@ export default function ProjectEditor({ initialHtml = '', onChange }: Props) {
             onChange?.(editor.getHTML(), editor.getJSON())
         },
     })
+    console.log(initialJson);
+
+    useEffect(() => {
+        if (editor && initialJson) {
+            editor.commands.setContent(initialJson);
+        }
+    }, [editor, initialJson]);
 
     return (
         <div className="w-full mx-auto bg-white border rounded-md focus:outline-none focus:ring-1 border-gray-300 focus:ring-black">
