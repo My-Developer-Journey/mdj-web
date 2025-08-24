@@ -12,6 +12,7 @@ import {
   Search,
   Settings,
 } from "lucide-react"
+import { useRouter } from "next/navigation";
 
 // Component Section
 const Section = ({ title, children }: { title: string; children: React.ReactNode }) => (
@@ -53,6 +54,7 @@ const Item = ({
 )
 
 const AdminSideBar = () => {
+  const router = useRouter()
   return (
     <aside className="border-r-17 bg-gray-100 border-gray-500 w-64 p-4">
       {/* Profile */}
@@ -72,7 +74,12 @@ const AdminSideBar = () => {
           <Item icon={<Home className="w-4 h-4" />} label="Home" />
           <Item icon={<Calendar className="w-4 h-4" />} label="Programs" />
           <Item icon={<Calendar className="w-4 h-4" />} label="Events" />
-          <Item icon={<Users className="w-4 h-4" />} label="Memberships" />
+          <button
+            onClick={() => router.push("/admin/users")}
+            className="flex items-center gap-2 w-full px-2 py-2 rounded-md hover:bg-gray-50"
+          >
+            <Users className="w-4 h-4" /> Users
+          </button>
           <Item icon={<File className="w-4 h-4" />} label="Documents" />
         </Section>
 

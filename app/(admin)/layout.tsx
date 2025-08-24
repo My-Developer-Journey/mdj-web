@@ -1,22 +1,37 @@
+'use client'
+
 import { GoogleOAuthProvider } from "@react-oauth/google";
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import { LoadingProvider } from "../contexts/LoadingContext";
 import "../globals.css";
 
-export default function LoginLayout({
+import AdminSideBar from "@/app/components/admin/AdminSideBar";
+import AdminTopCrumb from "@/app/components/admin/AdminTopCrumb";
+
+export default function AdminRootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="en">
-      <body className="flex flex-col min-h-screen min-w-[var(--min-width)] max-w-[var(--max-width)] mx-auto">
+      <body className="flex min-h-screen">
         <LoadingProvider>
           <GoogleOAuthProvider clientId="1234567890-fakeid.apps.googleusercontent.com">
-            <main className="flex-1">{children}</main>
+            <div className="grid grid-cols-[240px_1fr] w-full">
+              {/* Sidebar */}
+              <AdminSideBar />
+
+              {/* Main content */}
+              <div className="flex flex-col bg-white w-full">
+                <AdminTopCrumb />
+                <main className="flex-1 p-6 bg-white">{children}</main>
+              </div>
+            </div>
           </GoogleOAuthProvider>
+
           <ToastContainer
             toastClassName="font-medium min-h-[4rem] rounded-lg shadow-md"
             position="top-right"
