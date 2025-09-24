@@ -1,12 +1,12 @@
 
-const UserPost = () => {
+const PostPage = () => {
     return (
         <div>
             <div>
-                UserPost
+                PostPage
             </div>
         </div>
     )
 }
 
-export default UserPost
+export default PostPage

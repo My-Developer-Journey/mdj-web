@@ -136,13 +136,13 @@ export default function Header() {
                                         {showDropdown && (
                                             <div className="absolute right-0 top-12 bg-white shadow-lg rounded-md py-2 w-48 z-50">
                                                 <Link
-                                                    href={`/${user?.displayName}`}
+                                                    href={`/user/${user?.displayName}`}
                                                     className="block px-4 py-2 hover:bg-gray-100 cursor-pointer"
                                                 >
                                                     Profile
                                                 </Link>
                                                 <Link
-                                                    href={`/${user?.displayName}/all-posts`}
+                                                    href={`/user/${user?.displayName}/all-posts`}
                                                     className="block px-4 py-2 hover:bg-gray-100 cursor-pointer"
                                                 >
                                                     Posts
