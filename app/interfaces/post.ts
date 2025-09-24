@@ -14,8 +14,8 @@ export interface PostRequest {
 
 export interface Post {
   id: string;
-  slug: string;
-  title: string;
+  slug?: string;
+  title?: string;
   thumbnailUrl?: string;
   author: Author;
   categories: Category[];

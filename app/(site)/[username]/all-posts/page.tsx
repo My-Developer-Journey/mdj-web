@@ -1,28 +1,13 @@
 'use client'
 
 import MyPost from "@/app/components/post/MyPost";
-import { useAuth } from "@/app/contexts/AuthContext";
 import { useLoading } from "@/app/contexts/LoadingContext";
 import { Post } from "@/app/interfaces/post";
 import { getUserPosts } from "@/app/services/post.service";
 import { useEffect, useState } from "react";
 
-const posts = [
-    {
-        id: 1,
-        slug: 'post-1',
-        title: 'Hành trình học Spring Boot',
-        thumbnail: '/sample-post-thumbnail.jpg',
-        author: 'Lê Quý Điềm',
-        date: '2025-07-22',
-        excerpt: 'Khám phá cách xây dựng backend với Spring Boot trong dự án blog...',
-    }
-];
-
-const page = () => {
+const AllUserPosts = () => {
     const { setLoading } = useLoading();
-    const { user } = useAuth();
-
 
     const [posts, setPosts] = useState<Post[]>([]);
 
@@ -43,6 +28,7 @@ const page = () => {
         };
 
         fetchUserPosts();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (
@@ -62,4 +48,4 @@ const page = () => {
     )
 }
 
-export default page
+export default AllUserPosts

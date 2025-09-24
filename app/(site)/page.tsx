@@ -1,6 +1,7 @@
 import PostItem from '../components/post/PostItem';
 import TopPost from '../components/post/TopPost';
 import TopAuthor from '../components/user/TopAuthor';
+import { Post } from '../interfaces/post';
 
 const samplePosts = [
   {
@@ -26,53 +27,46 @@ const samplePosts = [
   },
 ];
 
-const posts = [
+const posts: Post[] = [
   {
-    id: 1,
-    slug: 'post-1',
-    title: 'Hành trình học Spring Boot',
-    thumbnail: '/sample-post-thumbnail.jpg',
-    author: 'Lê Quý Điềm',
-    date: '2025-07-22',
-    excerpt: 'Khám phá cách xây dựng backend với Spring Boot trong dự án blog...',
-  },
-  {
-    id: 2,
-    slug: 'post-2',
-    title: 'Bí kíp Next.js cho frontend tối ưu',
-    thumbnail: '/sample-post-thumbnail.jpg',
-    author: 'Nguyễn Văn A',
-    date: '2025-07-20',
-    excerpt: 'Hướng dẫn cách dùng Next.js để xây dựng UI thân thiện và nhanh...',
-  },
-  {
-    id: 3,
-    slug: 'post-3',
-    title: 'CI/CD triển khai bằng Docker + AWS',
-    thumbnail: '/sample-post-thumbnail.jpg',
-    author: 'Trần B',
-    date: '2025-07-18',
-    excerpt: 'Làm sao để tự động hoá quy trình deploy bằng Docker và AWS...',
-  },
+    id: "1",
+    slug: "post-1",
+    title: "Hành trình học Spring Boot",
+    thumbnailUrl: "/sample-post-thumbnail.jpg",
+    author: {
+      id: "u1",
+      email: "demo@example.com",
+      displayName: "Lê Quý Điềm",
+      avatar: "/avatar.png",
+    },
+    categories: [],
+    tags: [],
+    content: "Demo content",
+    contentJson: {},
+    postStatus: "DRAFT",
+    likeCount: 0,
+    commentCount: 0,
+    viewCount: 0,
+  }
 ];
 
 const authors = [
   {
-    id: 1,
+    id: '1',
     name: 'Lê Quý Điềm',
     avatar: '/default-avatar.png',
     posts: 5,
     likes: 10,
   },
   {
-    id: 2,
+    id: '2',
     name: 'Nguyễn Văn A',
     avatar: '/default-avatar.png',
     posts: 3,
     likes: 4,
   },
   {
-    id: 3,
+    id: '3',
     name: 'Trần B',
     avatar: '/default-avatar.png',
     posts: 2,
