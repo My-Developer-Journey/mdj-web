@@ -31,6 +31,8 @@ const AllUserPosts = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    console.log(posts);
+
     return (
         <div>
             <h1 className="text-left text-4xl font-semibold text-[var(--primary-black)] mb-[0.75rem]">

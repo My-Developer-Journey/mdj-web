@@ -4,6 +4,25 @@ import Image from "next/image";
 import Link from "next/link";
 import { Card, CardContent } from "../common/ProjectCard";
 
+const getStatusColor = (status: string) => {
+    switch (status) {
+        case "DRAFT":
+            return "text-gray-500";
+        case "SUBMITTED":
+            return "text-blue-500";
+        case "ACCEPTED":
+            return "text-green-500";
+        case "REJECTED":
+            return "text-red-500";
+        case "PUBLISHED":
+            return "text-emerald-500";
+        case "REMOVED":
+            return "text-orange-500";
+        default:
+            return "text-black";
+    }
+};
+
 const MyPost = ({ post }: { post: Post }) => {
     return (
         <Card className="flex items-center gap-4 p-4 overflow-hidden relative">
@@ -12,7 +31,7 @@ const MyPost = ({ post }: { post: Post }) => {
                 alt="Post thumbnail"
                 width={250}
                 height={250}
-                className="w-[30%] h-[160px] object-cover rounded-md"
+                className="w-[30%] h-[200px] object-cover rounded-md"
             />
             <div className="w-[70%]">
                 <CardContent className="p-4">
@@ -24,6 +43,13 @@ const MyPost = ({ post }: { post: Post }) => {
                             {post.title || "Sample Post Title"}
                         </h3>
                     </Link>
+                    <p
+                        className={`text-md mt-2 w-fit font-extrabold ${getStatusColor(
+                            post.postStatus
+                        )}`}
+                    >
+                        {post.postStatus}
+                    </p>
                     <p className="text-sm text-gray-500 mt-2 w-fit">
                         By {"John Doe"} • {"July 11, 2025"}
                     </p>
@@ -46,14 +72,16 @@ const MyPost = ({ post }: { post: Post }) => {
                     </div>
                 </CardContent>
             </div>
-            <div className="absolute right-0 top-0 bg-gray-200 rounded-bl-md p-[0.25rem] hover:bg-gray-300 transition-all">
-                <Link
-                    href={`/post/edit/${post.slug}`}
-                    className="w-8 h-8 flex items-center justify-center rounded-full"
-                >
-                    <Pencil className="w-5 h-5 text-gray-700" />
-                </Link>
-            </div>
+            {post.postStatus !== "REMOVED" && (
+                <div className="absolute right-0 top-0 bg-gray-200 rounded-bl-md p-[0.25rem] hover:bg-gray-300 transition-all">
+                    <Link
+                        href={`/post/edit/${post.slug}`}
+                        className="w-8 h-8 flex items-center justify-center rounded-full"
+                    >
+                        <Pencil className="w-5 h-5 text-gray-700" />
+                    </Link>
+                </div>
+            )}
         </Card>
     )
 }
