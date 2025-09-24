@@ -68,6 +68,7 @@ const CreatePost = () => {
         };
 
         fetchDraft();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     // Thumbnail handling

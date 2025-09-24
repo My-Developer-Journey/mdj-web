@@ -50,3 +50,9 @@ export const updatePost = (postId: string, data: PostRequest, file: File | null 
     body: formData,
   });
 };
+
+export const getUserPosts = async () => {
+  return api("/posts/me", {
+    method: "GET"
+  });
+};
