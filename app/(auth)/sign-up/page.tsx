@@ -1,12 +1,12 @@
 "use client";
 
-import { signUp } from "@/app/services/authentication.service";
+import GoogleLoginButton from "@/components/common/GoogleLoginButton";
+import { useLoading } from '@/providers/LoadingContext';
+import { signUp } from "@/services/authentication.service";
 import { Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from 'next/navigation';
 import { useState } from "react";
-import GoogleLoginButton from "../../components/common/GoogleLoginButton";
-import { useLoading } from '../../contexts/LoadingContext';
 
 const SignUp = () => {
   const router = useRouter();

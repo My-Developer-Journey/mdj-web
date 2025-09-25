@@ -1,9 +1,9 @@
 'use client'
 
-import MyPost from "@/app/components/post/MyPost";
-import { useLoading } from "@/app/contexts/LoadingContext";
-import { Post } from "@/app/interfaces/post";
-import { getUserPosts } from "@/app/services/post.service";
+import MyPost from "@/components/post/MyPost";
+import { useLoading } from "@/providers/LoadingContext";
+import { getUserPosts } from "@/services/post.service";
+import { Post } from "@/types/post";
 import { useEffect, useState } from "react";
 
 const AllUserPosts = () => {

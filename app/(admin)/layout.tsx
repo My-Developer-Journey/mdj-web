@@ -4,11 +4,11 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import { LoadingProvider } from "../contexts/LoadingContext";
+import { LoadingProvider } from "../../providers/LoadingContext";
 import "../globals.css";
 
-import AdminSideBar from "@/app/components/admin/AdminSideBar";
-import AdminTopCrumb from "@/app/components/admin/AdminTopCrumb";
+import AdminSideBar from "@/components/admin/AdminSideBar";
+import AdminTopCrumb from "@/components/admin/AdminTopCrumb";
 
 export default function AdminRootLayout({
   children,
