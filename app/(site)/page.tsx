@@ -1,7 +1,7 @@
-import PostItem from '../components/post/PostItem';
-import TopPost from '../components/post/TopPost';
-import TopAuthor from '../components/user/TopAuthor';
-import { Post } from '../interfaces/post';
+import PostItem from '@/components/post/PostItem';
+import TopPost from '@/components/post/TopPost';
+import TopAuthor from '@/components/user/TopAuthor';
+import { Post } from '@/types/post';
 
 const samplePosts = [
   {
@@ -32,7 +32,7 @@ const posts: Post[] = [
     id: "1",
     slug: "post-1",
     title: "Hành trình học Spring Boot",
-    thumbnailUrl: "/sample-post-thumbnail.jpg",
+    thumbnailUrl: "/images/sample-post-thumbnail.jpg",
     author: {
       id: "u1",
       email: "demo@example.com",
@@ -54,21 +54,21 @@ const authors = [
   {
     id: '1',
     name: 'Lê Quý Điềm',
-    avatar: '/default-avatar.png',
+    avatar: '/images/default-avatar.png',
     posts: 5,
     likes: 10,
   },
   {
     id: '2',
     name: 'Nguyễn Văn A',
-    avatar: '/default-avatar.png',
+    avatar: '/images/default-avatar.png',
     posts: 3,
     likes: 4,
   },
   {
     id: '3',
     name: 'Trần B',
-    avatar: '/default-avatar.png',
+    avatar: '/images/default-avatar.png',
     posts: 2,
     likes: 7,
   },

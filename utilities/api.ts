@@ -1,4 +1,4 @@
-import { ApiResponse } from "@/app/interfaces/api";
+import { ApiResponse } from "@/types/api";
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 

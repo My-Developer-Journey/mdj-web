@@ -1,10 +1,10 @@
+import Header from "@/components/common/Header";
+import FooterWrapper from "@/components/wrappers/FooterWrapper";
+import { AuthProvider } from '@/providers/AuthContext';
+import { LoadingProvider } from '@/providers/LoadingContext';
+import SWRProvider from '@/providers/SWRProvider';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Header from "../components/common/Header";
-import FooterWrapper from "../components/wrappers/FooterWrapper";
-import { AuthProvider } from '../contexts/AuthContext';
-import { LoadingProvider } from '../contexts/LoadingContext';
-import SWRProvider from '../contexts/SWRProvider';
 import "../globals.css";
 
 export default function RootLayout({

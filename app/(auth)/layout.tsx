@@ -1,8 +1,8 @@
+import Header from "@/components/common/Header";
+import { LoadingProvider } from "@/providers/LoadingContext";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Header from "../components/common/Header";
-import { LoadingProvider } from "../contexts/LoadingContext";
 import "../globals.css";
 
 export default function LoginLayout({

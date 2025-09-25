@@ -1,14 +1,14 @@
 'use client'
 
-import { signIn } from "@/app/services/authentication.service";
-import { userProfile } from "@/app/services/user.service";
+import GoogleLoginButton from "@/components/common/GoogleLoginButton";
+import { useAuth } from '@/providers/AuthContext';
+import { useLoading } from '@/providers/LoadingContext';
+import { signIn } from "@/services/authentication.service";
+import { userProfile } from "@/services/user.service";
 import { Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from 'next/navigation';
 import { useState } from "react";
-import GoogleLoginButton from "../../components/common/GoogleLoginButton";
-import { useAuth } from '../../contexts/AuthContext';
-import { useLoading } from '../../contexts/LoadingContext';
 
 const Login = () => {
   const router = useRouter();
