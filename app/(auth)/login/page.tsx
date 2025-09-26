@@ -43,7 +43,7 @@ const Login = () => {
       console.log(userData.data);
 
       if (userData.data?.role === "ADMIN") {
-        router.push("/admin/");
+        router.push("/admin/home");
       } else {
         router.push("/");
       }
