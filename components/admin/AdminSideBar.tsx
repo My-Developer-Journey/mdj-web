@@ -42,9 +42,9 @@ const Item = ({
   badge?: string
   onClick?: () => void
 }) => (
-  <div
+  <button
     onClick={onClick}
-    className={`flex items-center justify-between px-2 py-2 rounded-md cursor-pointer 
+    className={`flex items-center justify-between px-2 py-2 rounded-md cursor-pointer w-full
       ${active ? "bg-gray-100 font-semibold" : "hover:bg-gray-50"}`}
   >
     <div className="flex items-center gap-2">
@@ -57,7 +57,7 @@ const Item = ({
         {badge}
       </span>
     )}
-  </div>
+  </button>
 )
 
 const AdminSideBar = () => {
